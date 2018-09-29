@@ -35,6 +35,23 @@ router.post("/api/AddNewHero", function(req, res, next){
         }).catch(next);
 });
 
+//Search for Heroes
+router.get("/api/SearchAHero", function(req, res, next){
+    Heroes.find({})
+        .then(function(result){
+            result = result.filter(obj => (obj.name.toLowerCase().indexOf(req.query.name.toLowerCase()) != -1 || obj.alias.toLowerCase().indexOf(req.query.name.toLowerCase()) != -1));
+            res.send(result);
+        }).catch(next);
+});
+
+//Delete a hero by name
+router.delete("/api/DeleteByName", function(req, res, next){
+    Heroes.findOneAndDelete({name: req.query.name})
+        .then(function(result){
+            res.send(result);
+        }).catch(next);
+});
+
 app.use('/', router);
 
 //Error Handling
