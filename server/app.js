@@ -18,9 +18,14 @@ mongoose.Promise = global.Promise;
 //Setup BodyParser
 app.use(bodyParser.json());
 
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 //Get All Heroes
-router.get("/api/GetAllHeroes", function(req, res, next){
+router.get("/api/GetAllHeroes", function(req, res, next) {
     Heroes.find({})
         .then(function(result){
             res.send(result);
@@ -28,15 +33,24 @@ router.get("/api/GetAllHeroes", function(req, res, next){
 });
 
 //Add A Hero
-router.post("/api/AddNewHero", function(req, res, next){
+router.post("/api/AddNewHero", function(req, res, next) {
     Heroes.create(req.body)
         .then(function(result){
             res.send(result);
         }).catch(next);
 });
 
+//Update A Hero
+router.post("/api/UpdateAHero", function(req, res, next) {
+    let name = req.body.name;
+    Heroes.findOneAndUpdate({name: name}, req.body)
+        .then(function(result){
+            res.send(result);
+        }).catch(next);
+});
+
 //Search for Heroes
-router.get("/api/SearchAHero", function(req, res, next){
+router.get("/api/SearchAHero", function(req, res, next) {
     Heroes.find({})
         .then(function(result){
             result = result.filter(obj => (obj.name.toLowerCase().indexOf(req.query.name.toLowerCase()) != -1 || obj.alias.toLowerCase().indexOf(req.query.name.toLowerCase()) != -1));
@@ -45,7 +59,7 @@ router.get("/api/SearchAHero", function(req, res, next){
 });
 
 //Delete a hero by name
-router.delete("/api/DeleteByName", function(req, res, next){
+router.delete("/api/DeleteByName", function(req, res, next) {
     Heroes.findOneAndDelete({name: req.query.name})
         .then(function(result){
             res.send(result);

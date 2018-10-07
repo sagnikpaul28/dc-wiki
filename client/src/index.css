@@ -1,0 +1,49 @@
+body{
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.items{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.items .item{
+    flex: 1;
+    flex-basis: 25%;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.items .layer{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0,0,0,.5);
+    opacity: .7;
+    transition: .8s;
+}
+
+.items .layer img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    transition: .5s;
+}
+
+.items .item-name{
+    font-size: 1.75em;
+    text-align: center;
+    margin: 0;
+}
+
+.items .item:hover .layer{
+    opacity: .8;
+}
+
+.items .item:hover .layer img{
+    transform: scale(1.25);
+}
