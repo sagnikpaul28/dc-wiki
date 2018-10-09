@@ -1,3 +1,4 @@
 #ignore webstorm logs
 **/.idea
 **/.DS_Store
+.DS_Store
