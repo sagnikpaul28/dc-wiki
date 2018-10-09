@@ -16,19 +16,25 @@ export class Home extends React.Component {
                 (result) => {
                     this.setState({
                         items: result.map( (item) => {
+                            //Set Accent Color
                             let divStyles = {
                                 backgroundColor: item.accentColor
                             };
 
+                            //Fetch directory of images
                             item.imageUrl = "/img/characters/" + item.imageUrl;
+                            item.logoUrl = "/img/logo/" + item.logoUrl;
 
                             return (
-                              <div className="item" style={ divStyles } key={item._id}>
-                                  <div className="layer">
+                              <div className="item" key={item._id}>
+                                  <div className="color-layer" style={ divStyles } />
+                                  <div className="image-layer">
                                       <img src={item.imageUrl}/>
                                   </div>
-                                  <img src={item.logoUrl} className="item-logo"/>
-                                  <h1 className="item-name">{item.name}</h1>
+                                  <div className="content-layer">
+                                      <img src={item.logoUrl} className="logo"/>
+                                      <h1 className="name">{item.name}</h1>
+                                  </div>
                               </div>
                             );
                         })

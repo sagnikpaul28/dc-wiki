@@ -43,7 +43,8 @@ router.post("/api/AddNewHero", function(req, res, next) {
 //Update A Hero
 router.post("/api/UpdateAHero", function(req, res, next) {
     let name = req.body.name;
-    Heroes.findOneAndUpdate({name: name}, req.body)
+    let alias = req.body.alias;
+    Heroes.findOneAndUpdate({name: name, alias: alias}, req.body)
         .then(function(result){
             res.send(result);
         }).catch(next);

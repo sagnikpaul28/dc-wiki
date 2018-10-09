@@ -20,6 +20,24 @@ const heroesSchema = new Schema({
     accentColor: {
         type: String,
         required: true
+    },
+    summary: {
+        type: String
+    },
+    description: {
+        type: String
+    },
+    byLine: {
+        type: String
+    },
+    powers: {
+        type: String
+    },
+    firstAppearance: {
+        type: String
+    },
+    relatedCharacters: {
+        type: String
     }
 });
 
