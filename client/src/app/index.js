@@ -1,22 +1,22 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Router, Route } from "react-router";
-import createBrowserHistory from "history/createBrowserHistory";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import { Home } from './components/Home';
 import { Edit } from './components/Edit';
+import { Error} from './components/404';
 
-const newHistory = createBrowserHistory();
 
 class App extends React.Component {
     render() {
         return (
-            <Router history={newHistory} >
-                <div>
+            <BrowserRouter>
+                <Switch>
                     <Route exact path="/" component={Home} />
                     <Route exact path="/edit" component={Edit} />
-                </div>
-            </Router>
+                    <Route component={Error} />
+                </Switch>
+            </BrowserRouter>
         )
     }
 }

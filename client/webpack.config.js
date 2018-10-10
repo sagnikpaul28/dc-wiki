@@ -12,6 +12,9 @@ var config = {
         filename: "bundle.js",
         publicPath: "/app/"
     },
+    devServer: {
+        historyApiFallback: true,
+    },
     module: {
         rules: [
             {

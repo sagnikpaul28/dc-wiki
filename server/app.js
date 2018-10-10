@@ -43,8 +43,7 @@ router.post("/api/AddNewHero", function(req, res, next) {
 //Update A Hero
 router.post("/api/UpdateAHero", function(req, res, next) {
     let name = req.body.name;
-    let alias = req.body.alias;
-    Heroes.findOneAndUpdate({name: name, alias: alias}, req.body)
+    Heroes.findOneAndUpdate({name: name}, req.body)
         .then(function(result){
             res.send(result);
         }).catch(next);
@@ -61,7 +60,7 @@ router.get("/api/SearchAHero", function(req, res, next) {
 
 //Delete a hero by name
 router.delete("/api/DeleteByName", function(req, res, next) {
-    Heroes.findOneAndDelete({name: req.query.name})
+    Heroes.findOneAndDelete({name: req.query.name, alias: req.query.alias})
         .then(function(result){
             res.send(result);
         }).catch(next);
