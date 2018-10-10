@@ -53,7 +53,9 @@ router.post("/api/UpdateAHero", function(req, res, next) {
 router.get("/api/SearchAHero", function(req, res, next) {
     Heroes.find({})
         .then(function(result){
-            result = result.filter(obj => (obj.name.toLowerCase().indexOf(req.query.name.toLowerCase()) != -1 || obj.alias.toLowerCase().indexOf(req.query.name.toLowerCase()) != -1));
+            result = result.filter(obj => {
+                return obj.name.toLowerCase().indexOf(req.query.name.toLowerCase()) != -1 || ( obj.alias != null ? (obj.alias.toLowerCase().indexOf(req.query.name.toLowerCase()) != -1) : false )
+            });
             res.send(result);
         }).catch(next);
 });
