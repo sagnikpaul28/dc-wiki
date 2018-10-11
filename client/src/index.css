@@ -1,7 +1,7 @@
 body{
     margin: 0;
     overflow-x: hidden;
-    font-family: 'K2D', sans-serif;
+    font-family: 'Niramit', sans-serif;
 }
 
 .items{
@@ -116,6 +116,97 @@ Edit Page
  */
 
 
+
+/*
+================================================================================================
+Single Character
+================================================================================================
+ */
+.single-character-div{
+    width: 90%;
+    max-width: 1000px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 480px auto 50px;
+    color: white;
+}
+.single-character-div .character-banner{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 400px;
+    width: 100%;
+    overflow: hidden;
+}
+.single-character-div .character-banner img{
+    height: 100vh;
+    width: 100%;
+    object-fit: cover;
+    position: fixed;
+}
+.single-character-div .accent-break{
+    position: absolute;
+    top: 400px;
+    left: 0;
+    height: 0;
+    width: 100%;
+    border-bottom: 80px solid;
+}
+.single-character-div .layer{
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    object-fit: cover;
+    background-color: rgba(0,0,0,.9);
+    top: 480px;
+    z-index: 0;
+    position: absolute;
+}
+.single-character-div .image-container {
+    position: relative;
+    flex-basis: 180px;
+}
+.single-character-div .image-container img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    top: -80px;
+    position: relative;
+}
+.single-character-div .detail-container{
+    flex: 1;
+    position: relative;
+    margin-left: 40px;
+    padding: 80px 0 15px;
+    top: -80px;
+}
+.single-character-div .detail-container h1{
+    margin: 10px 0 0;
+    font-size: 2em;
+    display: inline-block;
+}
+.single-character-div .detail-container .byline{
+    float: right;
+    margin: 10px 0;
+    font-size: 1.2em;
+}
+.single-character-div .detail-container p{
+    line-height: 1.6;
+}
+.single-character-div .detail-container .summary{
+    font-size: 1.1em;
+    margin: 5px 0 0;
+}
+.single-character-div .other-container {
+    position: relative;
+    margin-top: -40px;
+}
+.single-character-div .other-container p{
+    line-height: 1.6;
+    font-size: 1.2em;
+    margin: 0 0 1em;
+}
 
 /*
 ================================================================================================

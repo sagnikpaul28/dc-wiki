@@ -49,7 +49,6 @@ export class Home extends React.Component {
     }
 
     render() {
-        console.log(this.state.items);
         return (
             <div className="items">
                 {this.state.items}

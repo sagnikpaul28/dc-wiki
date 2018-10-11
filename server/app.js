@@ -60,6 +60,17 @@ router.get("/api/SearchAHero", function(req, res, next) {
         }).catch(next);
 });
 
+//Get Hero By Url
+router.get("/api/GetHeroByUrl", function(req, res, next) {
+    Heroes.find({})
+        .then( function(result)  {
+            result = result.filter(obj => {
+                return obj.url === req.query.name.toLowerCase();
+            });
+            res.send(result);
+        }).catch(next);
+});
+
 //Delete a hero by name
 router.delete("/api/DeleteByName", function(req, res, next) {
     Heroes.findOneAndDelete({name: req.query.name, alias: req.query.alias})

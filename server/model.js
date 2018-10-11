@@ -38,6 +38,9 @@ const heroesSchema = new Schema({
     },
     relatedCharacters: {
         type: String
+    },
+    url: {
+        type: String
     }
 });
 

@@ -11,36 +11,43 @@ export class SingleCharacter extends React.Component {
 
     componentDidMount(){
         console.log(this.props.match.params.name);
-        fetch("http://localhost:4000/api/SearchAHero?name="+this.props.match.params.name)
+        fetch("http://localhost:4000/api/GetHeroByUrl?name="+this.props.match.params.name)
             .then(results => results.json())
             .then(results => {
                 this.setState({
                     character: results.map( character => {
 
+                        character.wallpaper = '/img/wallpapers/' + character.imageUrl;
                         character.imageUrl = '/img/characters/' + character.imageUrl;
                         character.logoUrl = '/img/logo/' + character.logoUrl;
 
-                        character.byLine = character.byLine ? <p>{character.byLine}</p> : null;
-                        console.log(character.byLine);
+                        character.byLine = character.byLine ? <p className="byline">{character.byLine}</p> : null;
 
                         return (
-                            <div className="single-character-div" key={character._id}>
-                                <div className="image-container">
+                            <div className="single-character-div" key={character._id} >
+                                <div className="character-banner">
+                                    <img src={character.wallpaper } />
+                                </div>
+                                <div className="accent-break" style={ {borderColor: character.accentColor}} />
+
+                                <div className="layer" />
+
+                                <div className="image-container" >
                                     <img src={character.imageUrl} />
                                 </div>
-                                <div className="text-container">
-                                    <img src={character.logoUrl} />
+                                <div className="detail-container" >
                                     <h1>{character.name}</h1>
                                     {character.byLine}
-                                    <h3>{character.alias}</h3>
-                                    <p>{character.summary}</p>
+                                    <h3>Real Name: {character.alias}</h3>
+                                    <p className="first-apperance">First Appearance: {character.firstAppearance}</p>
+                                    <p className="summary">{character.summary}</p>
                                 </div>
-                                <div className="extra-container">
+                                <div className="other-container">
                                     <p>{character.description}</p>
-                                    <ol>Powers: {character.powers.split(",").map(power => <li>{power}</li>)}</ol>
-                                    <p>{character.firstAppearance}</p>
-                                    <p>Related Characters: {character.relatedCharacters}</p>
                                 </div>
+
+                                {/*Powers, Related Characters*/}
+                                
                             </div>
                         )
                     })
