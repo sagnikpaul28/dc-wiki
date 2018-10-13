@@ -1,5 +1,42 @@
 import React from 'react';
 
+
+class HeroUrl extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            otherCharacter: []
+        };
+    }
+
+    componentDidMount() {
+        fetch("http://localhost:4000/api/GetHeroByUrl?name="+this.props.otherCharacter.trim())
+            .then(results => results.json())
+            .then(results => {
+                this.setState({
+                    otherCharacter: results.map ( otherCharacter => {
+
+                        otherCharacter.imageUrl = '/img/characters/' + otherCharacter.imageUrl;
+
+                        return (
+                            <div className="related-character-item" key={otherCharacter.name}>
+                                <img src={otherCharacter.imageUrl} alt={otherCharacter.name} />
+                                <p key={otherCharacter.name}>{otherCharacter.name}</p>
+                            </div>
+                        )
+                    })
+                })
+            }, error => {
+                console.log(error);
+            });
+    }
+
+    render() {
+        return ( this.state.otherCharacter );
+    }
+}
+
 export class SingleCharacter extends React.Component {
     constructor() {
         super();
@@ -44,16 +81,23 @@ export class SingleCharacter extends React.Component {
                                 </div>
                                 <div className="other-container">
                                     <p>{character.description}</p>
+                                    <p className="powers">Powers: <span>{character.powers}</span></p>
+                                    <div className="related-characters">
+                                        <p>Related Characters: </p>
+                                        {character.relatedCharacters.split(",").map( item => {
+                                            return <HeroUrl otherCharacter={item} key={item}/>
+                                        })}
+                                    </div>
                                 </div>
 
                                 {/*Powers, Related Characters*/}
-                                
+
                             </div>
                         )
                     })
                 })
             }, error => {
-                this.setState = error;
+                console.log(error);
             })
     }
 
