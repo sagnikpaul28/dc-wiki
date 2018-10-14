@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export class Home extends React.Component {
     constructor() {
@@ -15,7 +16,7 @@ export class Home extends React.Component {
             .then(
                 (result) => {
                     this.setState({
-                        items: result.map( (item) => {
+                        items: result.map( (item ) => {
                             //Set Accent Color
                             let divStyles = {
                                 backgroundColor: item.accentColor
@@ -27,14 +28,16 @@ export class Home extends React.Component {
 
                             return (
                               <div className="item" key={item._id}>
-                                  <div className="color-layer" style={ divStyles } />
-                                  <div className="image-layer">
-                                      <img src={item.imageUrl}/>
-                                  </div>
-                                  <div className="content-layer">
-                                      <img src={item.logoUrl} className="logo"/>
-                                      <h1 className="name">{item.name}</h1>
-                                  </div>
+                                  <Link to={`/character/${item.url}`} >
+                                      <div className="color-layer" style={ divStyles } />
+                                      <div className="image-layer">
+                                          <img src={item.imageUrl}/>
+                                      </div>
+                                      <div className="content-layer">
+                                          <img src={item.logoUrl} className="logo"/>
+                                          <h1 className="name">{item.name}</h1>
+                                      </div>
+                                  </Link>
                               </div>
                             );
                         })

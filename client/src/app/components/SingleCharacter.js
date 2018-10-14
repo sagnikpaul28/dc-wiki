@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 
 class HeroUrl extends React.Component {
@@ -21,8 +22,10 @@ class HeroUrl extends React.Component {
 
                         return (
                             <div className="related-character-item" key={otherCharacter.name}>
-                                <img src={otherCharacter.imageUrl} alt={otherCharacter.name} />
-                                <p key={otherCharacter.name}>{otherCharacter.name}</p>
+                                <Link to={`/character/${otherCharacter.url}` } onClick={ () => SingleCharacter.changeCharacterFunction() } >
+                                    <img src={otherCharacter.imageUrl} alt={otherCharacter.name} />
+                                    <p key={otherCharacter.name}>{otherCharacter.name}</p>
+                                </Link>
                             </div>
                         )
                     })
@@ -46,8 +49,11 @@ export class SingleCharacter extends React.Component {
         };
     }
 
+    static changeCharacterFunction() {
+        SingleCharacter.forceUpdate();
+    }
+
     componentDidMount(){
-        console.log(this.props.match.params.name);
         fetch("http://localhost:4000/api/GetHeroByUrl?name="+this.props.match.params.name)
             .then(results => results.json())
             .then(results => {
@@ -85,7 +91,7 @@ export class SingleCharacter extends React.Component {
                                     <div className="related-characters">
                                         <p>Related Characters: </p>
                                         {character.relatedCharacters.split(",").map( item => {
-                                            return <HeroUrl otherCharacter={item} key={item}/>
+                                            return <HeroUrl otherCharacter={item} key={item} changeCharacterFunction={SingleCharacter.changeCharacterFunction.bind(this) }/>
                                         })}
                                     </div>
                                 </div>
@@ -94,17 +100,17 @@ export class SingleCharacter extends React.Component {
 
                             </div>
                         )
-                    })
-                })
+                    }),
+                    characterName: this.props.match.params.name
+                });
             }, error => {
                 console.log(error);
             })
     }
 
     render() {
-        console.log(this.state.character);
         return(
-            <div>
+            <div className="main-container">
                 {this.state.character}
             </div>
         )
