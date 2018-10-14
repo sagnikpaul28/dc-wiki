@@ -133,7 +133,29 @@ Edit Page
     outline: 0;
     cursor: pointer;
 }
-
+.edit .character-item{
+    position: relative;
+    display: block;
+    padding: 10px 0;
+}
+.edit .character-left{
+    display: inline-block;
+    font-size: 1.5em;
+}
+.edit .character-right{
+    float: right;
+}
+.edit .character-right .edit-button, .edit .character-right .delete-button{
+    font-size: 1em;
+    background: transparent;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    outline: 0;
+}
+.edit .character-right .delete-button{
+    margin-left: 10px;
+}
 
 /*
 ================================================================================================

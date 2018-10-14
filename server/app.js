@@ -24,10 +24,37 @@ app.use(function(req, res, next) {
     next();
 });
 
-//Get All Heroes
+function compareAsc (a, b) {
+    if (a.name > b.name) {
+        return 1;
+    }else if (a.name < b.name) {
+        return -1;
+    }
+    return 0;
+}
+function compareDesc (a, b) {
+    if (a.name > b.name) {
+        return -1;
+    }else if (a.name < b.name) {
+        return 1;
+    }
+    return 0;
+}
+/*
+Get All Heroes
+Key = Name, Sort = ASC for ascending order of name
+Key = Name, Sort = DESC for descending order of name
+*/
 router.get("/api/GetAllHeroes", function(req, res, next) {
     Heroes.find({})
         .then(function(result){
+            if (req.query.key.toLowerCase() === 'name'){
+                if (req.query.sort.toLowerCase() === 'asc') {
+                    result.sort(compareAsc);
+                }else if (req.query.sort.toLowerCase() === 'desc'){
+                    result.sort(compareDesc);
+                }
+            }
             res.send(result);
         }).catch(next);
 });
