@@ -16,7 +16,7 @@ export class Home extends React.Component {
             .then(
                 (result) => {
                     this.setState({
-                        items: result.map( (item ) => {
+                        items: result.map( (item) => {
                             //Set Accent Color
                             let divStyles = {
                                 backgroundColor: item.accentColor

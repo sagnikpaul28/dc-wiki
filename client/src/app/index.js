@@ -16,7 +16,7 @@ class App extends React.Component {
                     <Route exact path="/" component={Home} />
                     <Route exact path="/character/:name" component={SingleCharacter} />
                     <Route exact path="/edit/add" component={AddCharacter} />
-                    <Route path="/edit" component={Edit} />
+                    <Route exact path="/edit" component={Edit} />
                     <Route component={Error} />
                 </Switch>
             </BrowserRouter>

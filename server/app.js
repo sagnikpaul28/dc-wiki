@@ -1,6 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const fileUpload = require('express-fileupload');
+const cors = require('cors');
 
 //Import Schema
 const Heroes = require("./model");
@@ -8,6 +10,9 @@ const Heroes = require("./model");
 //Setup Router and Express Instance
 const router = express.Router();
 const app = express();
+
+app.use(cors());
+app.use(fileUpload());
 
 
 //Setup Mongoose
@@ -24,6 +29,8 @@ app.use(function(req, res, next) {
     next();
 });
 
+
+//Get Name in Ascending or Descending Order
 function compareAsc (a, b) {
     if (a.name > b.name) {
         return 1;
@@ -40,6 +47,7 @@ function compareDesc (a, b) {
     }
     return 0;
 }
+
 /*
 Get All Heroes
 Key = Name, Sort = ASC for ascending order of name
@@ -48,11 +56,13 @@ Key = Name, Sort = DESC for descending order of name
 router.get("/api/GetAllHeroes", function(req, res, next) {
     Heroes.find({})
         .then(function(result){
-            if (req.query.key.toLowerCase() === 'name'){
-                if (req.query.sort.toLowerCase() === 'asc') {
-                    result.sort(compareAsc);
-                }else if (req.query.sort.toLowerCase() === 'desc'){
-                    result.sort(compareDesc);
+            if (req.query.key){
+                if (req.query.key.toLowerCase() === 'name'){
+                    if (req.query.sort.toLowerCase() === 'asc') {
+                        result.sort(compareAsc);
+                    }else if (req.query.sort.toLowerCase() === 'desc'){
+                        result.sort(compareDesc);
+                    }
                 }
             }
             res.send(result);
@@ -104,6 +114,27 @@ router.delete("/api/DeleteByName", function(req, res, next) {
         .then(function(result){
             res.send(result);
         }).catch(next);
+});
+
+
+router.post("/api/UploadImage", function(req, res, next) {
+    let imageFile = req.files.fileImage;
+    let logoFile = req.files.logoImage;
+    let fileName = req.body.fileName;
+
+    imageFile.mv(`/Users/sagnikpaul28/Documents/dc-wiki/client/src/img/characters/${fileName}.jpg`, function(err) {
+        if (err) {
+            console.log(err);
+            return res.status(500).send(err);
+        }
+    });
+    logoFile.mv(`/Users/sagnikpaul28/Documents/dc-wiki/client/src/img/logo/${fileName}.jpg`, function(err) {
+        if (err) {
+            console.log(err);
+            return res.status(500).send(err);
+        }
+    });
+    res.send('success');
 });
 
 app.use('/', router);

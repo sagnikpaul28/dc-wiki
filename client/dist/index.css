@@ -114,6 +114,121 @@ body{
 Edit Page
 ================================================================================================
  */
+.edit{
+    width: 90%;
+    max-width: 1000px;
+    display: block;
+    margin: 40px auto 0;
+}
+.edit .add-new{
+    font-size: 1em;
+    float: right;
+    margin-right: .5em;
+    height: auto;
+    padding: 0px 9.5px 6px;
+    vertical-align: middle;
+    background: transparent;
+    border-radius: 50%;
+    line-height: 1em;
+    outline: 0;
+    cursor: pointer;
+}
+.edit .character-item{
+    position: relative;
+    display: block;
+    padding: 10px 0;
+}
+.edit .character-left{
+    display: inline-block;
+    font-size: 1.5em;
+}
+.edit .character-right{
+    float: right;
+}
+.edit .character-right .edit-button, .edit .character-right .delete-button{
+    font-size: 1em;
+    background: transparent;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    outline: 0;
+}
+.edit .character-right .delete-button{
+    margin-left: 10px;
+}
+
+
+
+/*
+================================================================================================
+Edit Add Character
+================================================================================================
+ */
+.add-character-container {
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-flow: column;
+}
+.add-character-container .form {
+    display: flex;
+    flex-flow: column;
+    width: 90%;
+    max-width: 400px;
+}
+.add-character-container .form .input-container {
+    position: relative;
+    margin: 10px 0;
+}
+.add-character-container .form .input-container label{
+    top: 7px;
+    left: 14px;
+    color: #999;
+    position: absolute;
+}
+.add-character-container .form .input-container input ~ label {
+    top: calc(50% - 2px);
+    left: 10px;
+    font-size: 16px;
+    transform: translateY(-50%);
+    padding: 0px 5px;
+    background: white;
+    transition: .3s;
+}
+.add-character-container .form .input-container input {
+    width: calc(100% - 20px);
+    display: block;
+    padding: 8px 10px;
+    font-size: 16px;
+    color: #555;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    outline: 0;
+    position: relative;
+    z-index: 1;
+    background: transparent;
+}
+.add-character-container .form .input-container input[type=file] {
+    padding: 40px 10px 8px;
+}
+.add-character-container .form .input-container input[type=text]:focus, .add-character-container .form .input-container input[type=text]:active {
+    border-color: #555;
+}
+.add-character-container .form .input-container input[type=text]:focus ~ label, .add-character-container .form .input-container input[type=text]:active ~ label, .add-character-container .form .input-container input[type=text].filled ~ label {
+    top: calc(50% - 20px);
+    font-size: 12px;
+    z-index: 1;
+}
+.add-character-container .form button {
+    padding: 10px 10px;
+    font-size: 16px;
+    background: transparent;
+    border-radius: 4px;
+    color: #555;
+    outline: 0;
+    margin-top: 20px;
+}
 
 
 
@@ -122,14 +237,18 @@ Edit Page
 Single Character
 ================================================================================================
  */
+.main-container{
+    position: relative;
+}
 .single-character-div{
     width: 90%;
     max-width: 1000px;
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    margin: 480px auto 50px;
-    color: white;
+    margin: 480px auto 0;
+    color: black;
+    padding-bottom: 100px;
 }
 .single-character-div .character-banner{
     position: absolute;
@@ -144,52 +263,58 @@ Single Character
     width: 100%;
     object-fit: cover;
     position: fixed;
+    top: 0;
 }
 .single-character-div .accent-break{
     position: absolute;
-    top: 400px;
+    top: -80px;
     left: 0;
     height: 0;
     width: 100%;
     border-bottom: 80px solid;
+    opacity: .85;
 }
 .single-character-div .layer{
     left: 0;
-    height: 100vh;
+    height: 100%;
     width: 100%;
     object-fit: cover;
-    background-color: rgba(0,0,0,.9);
-    top: 480px;
+    background-color: rgba(255,255,255,.8);
+    top: 0;
     z-index: 0;
     position: absolute;
 }
 .single-character-div .image-container {
     position: relative;
-    flex-basis: 180px;
+    flex-basis: 240px;
 }
 .single-character-div .image-container img{
     height: 100%;
     width: 100%;
     object-fit: cover;
-    top: -80px;
+    top: -180px;
     position: relative;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 10px 5px #00000055;
 }
 .single-character-div .detail-container{
     flex: 1;
     position: relative;
     margin-left: 40px;
-    padding: 80px 0 15px;
+    padding: 80px 0 120px;
     top: -80px;
 }
 .single-character-div .detail-container h1{
     margin: 10px 0 0;
-    font-size: 2em;
+    font-size: 4em;
     display: inline-block;
+    font-weight: 500;
 }
 .single-character-div .detail-container .byline{
     float: right;
-    margin: 10px 0;
-    font-size: 1.2em;
+    margin: 1.5em 0;
+    font-size: 1.5em;
+    font-weight: 900;
 }
 .single-character-div .detail-container p{
     line-height: 1.6;
@@ -200,12 +325,53 @@ Single Character
 }
 .single-character-div .other-container {
     position: relative;
-    margin-top: -40px;
+    margin-top: -140px;
 }
 .single-character-div .other-container p{
     line-height: 1.6;
     font-size: 1.2em;
     margin: 0 0 1em;
+}
+.single-character-div .other-container .powers{
+    line-height: 1.3;
+    text-transform: capitalize;
+}
+.single-character-div .other-container .powers span{
+    font-weight: 500;
+}
+.single-character-div .other-container .related-characters {
+    display: inline-flex;
+    flex-wrap: wrap;
+    margin: 0;
+    justify-content: space-between;
+    width: 100%;
+}
+.single-character-div .other-container .related-characters .related-character-item {
+    flex-basis: 155px;
+    display: flex;
+    flex-direction: column;
+    margin: 0 5px;
+}
+.single-character-div .other-container .related-characters .related-character-item a{
+    text-decoration: none;
+}
+.single-character-div .other-container .related-characters .related-character-item img {
+    display: block;
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    box-shadow: 0 0 5px 2px #00000099;
+}
+.single-character-div .other-container .related-characters .related-character-item p{
+    color: initial;
+    text-decoration: none;
+}
+.single-character-div .other-container .related-characters > p{
+    display: block;
+    flex-basis: 100%;
+    font-size: 1.5em;
+    margin: 1em 0 .5em;
+    font-weight: bold;
 }
 
 /*
