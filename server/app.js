@@ -71,6 +71,7 @@ router.get("/api/GetAllHeroes", function(req, res, next) {
 
 //Add A Hero
 router.post("/api/AddNewHero", function(req, res, next) {
+    console.log(req.body);
     Heroes.create(req.body)
         .then(function(result){
             res.send(result);
@@ -116,25 +117,44 @@ router.delete("/api/DeleteByName", function(req, res, next) {
         }).catch(next);
 });
 
-
+//Upload Images
 router.post("/api/UploadImage", function(req, res, next) {
     let imageFile = req.files.fileImage;
     let logoFile = req.files.logoImage;
     let fileName = req.body.fileName;
 
-    imageFile.mv(`/Users/sagnikpaul28/Documents/dc-wiki/client/src/img/characters/${fileName}.jpg`, function(err) {
-        if (err) {
-            console.log(err);
-            return res.status(500).send(err);
-        }
-    });
-    logoFile.mv(`/Users/sagnikpaul28/Documents/dc-wiki/client/src/img/logo/${fileName}.jpg`, function(err) {
-        if (err) {
-            console.log(err);
-            return res.status(500).send(err);
-        }
-    });
-    res.send('success');
+    let fileExtension = imageFile.name.substring(imageFile.name.lastIndexOf('.') + 1, imageFile.name.length);
+
+    Heroes.find({url: fileName})
+        .then(result => {
+
+            //check if item already exists in db
+            if (result.length === 0) {
+
+                //insert images in file
+                imageFile.mv(`/Users/sagnikpaul28/Documents/dc-wiki/client/src/img/characters/${fileName}.${fileExtension}`, function(err) {
+                    if (err) {
+                        console.log(err);
+                        return res.status(500).send(err);
+                    }
+                });
+
+                //insert logo in file
+                logoFile.mv(`/Users/sagnikpaul28/Documents/dc-wiki/client/src/img/logo/${fileName}.${fileExtension}`, function(err) {
+                    if (err) {
+                        console.log(err);
+                        return res.status(500).send(err);
+                    }
+                });
+
+                res.send('success');
+
+            }else {
+
+                res.status(304).send('Already Exists');
+
+            }
+        });
 });
 
 app.use('/', router);
