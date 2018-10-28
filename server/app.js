@@ -78,10 +78,10 @@ router.post("/api/AddNewHero", function(req, res, next) {
         }).catch(next);
 });
 
-//Update A Hero
+//Update A Hero by its url
 router.post("/api/UpdateAHero", function(req, res, next) {
-    let name = req.body.name;
-    Heroes.findOneAndUpdate({name: name}, req.body)
+    let url = req.body.url;
+    Heroes.findOneAndUpdate({url: url}, req.body)
         .then(function(result){
             res.send(result);
         }).catch(next);

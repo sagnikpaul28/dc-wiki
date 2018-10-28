@@ -229,7 +229,165 @@ Edit Add Character
     outline: 0;
     margin-top: 20px;
 }
+/*
+================================================================================================
+Edit Modify Character
+================================================================================================
+ */
+.modify-character-div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.modify-character-div .items {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    margin: 10px 5px;
+    width: 180px;
+    position: relative;
+    padding-bottom: 15px;
+    cursor: pointer;
+}
+.modify-character-div .items .image {
+    height: 300px;
+    width: 180px;
+}
+.modify-character-div .items .image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.modify-character-div .items p:nth-of-type(1) {
+    margin: 5px 0 0;
+    font-size: 1.5em;
+    word-break: break-word;
+    padding-bottom: 5px;
+}
+.modify-character-div .items p:nth-of-type(2) {
+    font-size: 1em;
+    word-break: break-word;
+    display: inline-block;
+    margin: 0;
+}
+.modify-character-div .items hr {
+    width: 80px;
+    margin: 10px 0 0;
+    border: 1.5px solid #aaa;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
 
+.modify-character-div .modal {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: .3s;
+}
+.modify-character-div .modal .modal-container {
+    width: 90%;
+    height: 90%;
+    max-width: 600px;
+    border-radius: 5px;
+    background: rgba(255,255,255,.95);
+    padding: 5px 15px;
+    overflow: hidden;
+    max-height: 750px;
+}
+.modify-character-div .modal .modal-container .modal-content {
+    height: calc(100% - 60px);
+    overflow-y: visible;
+    overflow-x: hidden;
+    padding: 0 5px;
+}
+.modify-character-div .modal .modal-container .modal-content.show-paragraph {
+    height: calc(100% - 85px);
+}
+.modify-character-div .modal .input-container {
+    position: relative;
+    margin: 15px 0 25px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+.modify-character-div .modal .input-container img {
+    max-width: calc(100% - 30px);
+    object-fit: contain;
+    padding: 40px 15px 0;
+}
+.modify-character-div .modal .input-container .characterImage {
+    height: 350px;
+}
+.modify-character-div .modal .input-container .logoImage {
+    height: 70px;
+}
+.modify-character-div .modal .input-container label{
+    top: 7px;
+    left: 14px;
+    color: #999;
+    position: absolute;
+}
+.modify-character-div .modal .input-container label span {
+    height: 20px;
+    width: 40px;
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    margin: -5px 0 -5px 5px;
+}
+.modify-character-div .modal .input-container input ~ label {
+    top: calc(50% - 2px);
+    left: 10px;
+    font-size: 16px;
+    transform: translateY(-50%);
+    padding: 0 5px;
+    background: rgb(245,245,245);
+    transition: .3s;
+}
+.modify-character-div .modal .input-container input {
+    width: calc(100% - 20px);
+    display: block;
+    padding: 8px 10px;
+    font-size: 16px;
+    color: #555;
+    border-radius: 5px;
+    border: 0;
+    outline: 0;
+    position: relative;
+    z-index: 1;
+    background: transparent;
+}
+.modify-character-div .modal .input-container input[type=text]:focus, .modify-character-div .modal .input-container input[type=text]:active {
+    border-color: #555;
+}
+.modify-character-div .modal .input-container input[type=text]:focus ~ label, .modify-character-div .modal .input-container input[type=text]:active ~ label, .modify-character-div .modal .input-container input[type=text].filled ~ label {
+    top: calc(50% - 20px);
+    font-size: 12px;
+    z-index: 1;
+}
+.modify-character-div .modal button {
+    padding: 10px 10px;
+    font-size: 16px;
+    background: transparent;
+    border-radius: 4px;
+    color: #555;
+    outline: 0;
+    margin: 10px 5px 0;
+}
+.modify-character-div .modal p {
+    margin: 5px 5px 0;
+    transition: .4s;
+}
+.modify-character-div .modal p.hide {
+    display: none;
+}
 
 
 /*
