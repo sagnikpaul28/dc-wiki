@@ -43,7 +43,7 @@ export class AddCharacter extends React.Component {
         event.preventDefault();
 
         //Check if any filed is empty
-        if (this.state.name.trim() === '' || this.state.alias.trim() === '' || this.state.firstAppearance.trim() === '' || this.state.superpowers.trim() === '' || this.state.accentColor.trim() === '' || this.state.summary.trim() === '' || this.state.description.trim() === '' || this.state.byLine.trim() === '' || this.state.relatedCharacters.trim() === '' || this.state.url.trim() === '') {
+        if (this.state.name.trim() === '' || this.state.alias.trim() === '' || this.state.firstAppearance.trim() === '' || this.state.superpowers.trim() === '' || this.state.accentColor.trim() === '' || this.state.summary.trim() === '' || this.state.description.trim() === '' || this.state.byLine.trim() === '' || this.state.relatedCharacters.trim() === '' || this.state.url.trim() === '' ) {
             this.setState({
                 message: 'Please fill out all the fields'
             });
@@ -58,9 +58,7 @@ export class AddCharacter extends React.Component {
             return;
         }
         let accentColorCopy = this.state.accentColor.substring(1).split('');
-        console.log(accentColorCopy);
         for (let i=0; i< accentColorCopy.length; i++) {
-            console.log(accentColorCopy[i]);
             if ( !((accentColorCopy[i] >= '0' && accentColorCopy[i] <= '9') || (accentColorCopy[i] >= 'a' && accentColorCopy[i] <= 'f') || (accentColorCopy[i] >= 'A' && accentColorCopy[i] <= 'F'))){
                 this.setState({
                     message: 'Please enter proper Accent Color'
@@ -75,79 +73,91 @@ export class AddCharacter extends React.Component {
         });
 
         //Save the file to FormData object
-        let fileImage = this.uploadLogo.files[0];
+        let fileImage = this.uploadImage.files[0];
         let logoImage = this.uploadLogo.files[0];
+        let wallpaperImage = this.uploadWallpaper.files[0];
 
         const data = new FormData();
 
         data.append('fileImage', fileImage);
         data.append('logoImage', logoImage);
+        data.append('wallpaperImage', wallpaperImage);
         data.append('fileName', this.state.url);
 
-        fetch("http://localhost:4000/api/UploadImage", {
-            method: "POST",
-            body: data,
-        }).then(res => {
-            if (res.status === 200) {
-                this.setState({
-                    message: 'Uploading'
-                });
-                let data = {
-                    name: this.state.name,
-                    alias: this.state.alias,
-                    accentColor: this.state.accentColor,
-                    firstAppearance: this.state.firstAppearance,
-                    superpowers: this.state.superpowers,
-                    summary: this.state.summary,
-                    description: this.state.description,
-                    byLine: this.state.byLine,
-                    relatedCharacters: this.state.relatedCharacters,
-                    url: this.state.url,
-                    imageUrl: this.state.url + fileImage.name.substring( fileImage.name.lastIndexOf('.'), fileImage.name.length ),
-                    logoUrl: this.state.url + logoImage.name.substring( logoImage.name.lastIndexOf('.'), logoImage.name.length )
-                };
-                data = JSON.stringify(data);
-                console.log(data);
+        fetch(`http://localhost:4000/api/GetHeroByUrl?name=${this.state.url}`)
+            .then(res => res.json())
+            .then(res => {
+               if (res.length === 0 ) {
+                   fetch("http://localhost:4000/api/UploadImage", {
+                       method: "POST",
+                       body: data,
+                   }).then(res => {
+                       if (res.status === 200) {
+                           this.setState({
+                               message: 'Uploading'
+                           });
+                           let data = {
+                               name: this.state.name,
+                               alias: this.state.alias,
+                               accentColor: this.state.accentColor,
+                               firstAppearance: this.state.firstAppearance,
+                               superpowers: this.state.superpowers,
+                               summary: this.state.summary,
+                               description: this.state.description,
+                               byLine: this.state.byLine,
+                               relatedCharacters: this.state.relatedCharacters,
+                               url: this.state.url,
+                               imageUrl: this.state.url + fileImage.name.substring( fileImage.name.lastIndexOf('.'), fileImage.name.length ),
+                               logoUrl: this.state.url + logoImage.name.substring( logoImage.name.lastIndexOf('.'), logoImage.name.length )
+                           };
+                           data = JSON.stringify(data);
+                           console.log(data);
 
-                fetch("http://localhost:4000/api/AddNewHero", {
-                    method: "POST",
-                    body: data,
-                    headers: {
-                        'Content-Type':'application/json',
-                    }
-                }).then(res => {
-                    console.log(res);
-                    if (res.status === 200) {
-                        //Clear form fields
-                        this.setState({
-                            name: "",
-                            alias: "",
-                            accentColor: "",
-                            firstAppearance: "",
-                            superpowers: "",
-                            summary: "",
-                            description: "",
-                            byLine: "",
-                            relatedCharacters: "",
-                            url: "",
-                            message: "Uploaded successfully"
-                        });
-                        //Clear selected files
-                        this.uploadLogo.value = null;
-                        this.uploadImage.value = null;
+                           fetch("http://localhost:4000/api/AddNewHero", {
+                               method: "POST",
+                               body: data,
+                               headers: {
+                                   'Content-Type':'application/json',
+                               }
+                           }).then(res => {
+                               console.log(res);
+                               if (res.status === 200) {
+                                   //Clear form fields
+                                   this.setState({
+                                       name: "",
+                                       alias: "",
+                                       accentColor: "",
+                                       firstAppearance: "",
+                                       superpowers: "",
+                                       summary: "",
+                                       description: "",
+                                       byLine: "",
+                                       relatedCharacters: "",
+                                       url: "",
+                                       message: "Uploaded successfully"
+                                   });
+                                   //Clear selected files
+                                   this.uploadLogo.value = null;
+                                   this.uploadImage.value = null;
 
-                    }else {
-                        this.setState({
-                            message: 'Something went wrong. Try again.'
-                        })
-                    }
-                })
-            }else if (res.status === 304) {
-                this.setState({
-                    message: 'Character already exists'
-                });
-            }
-        });
+                               }else {
+                                   this.setState({
+                                       message: 'Something went wrong. Try again.'
+                                   })
+                               }
+                           })
+                       }else{
+                           this.setState({
+                               message: 'Something went wrong'
+                           });
+                       }
+                   });
+               }else {
+                   this.setState({
+                       message: 'Character already exists'
+                   });
+               }
+            });
     }
 
     render() {
@@ -193,6 +203,10 @@ export class AddCharacter extends React.Component {
                     <div className="input-container">
                         <label>Logo Image:</label>
                         <input type="file" name="logoUrl" className="form-input" ref={(ref) => { this.uploadLogo = ref; }}/>
+                    </div>
+                    <div className="input-container">
+                        <label>Wallpaper Image:</label>
+                        <input type="file" name="wallpaperUrl" className="form-input" ref={(ref) => { this.uploadWallpaper = ref; }}/>
                     </div>
                     <div className="input-container">
                         <input type="text" name="accentColor" className="form-input" onChange={this.onChangeInput.bind(this)} value={this.state.accentColor} />

@@ -17,6 +17,10 @@ const heroesSchema = new Schema({
         type: String,
         required: true
     },
+    wallpaperUrl: {
+        type: String,
+        required: true
+    },
     accentColor: {
         type: String,
         required: true

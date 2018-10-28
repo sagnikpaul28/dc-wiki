@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
+const fs = require('fs');
 
 //Import Schema
 const Heroes = require("./model");
@@ -71,7 +72,6 @@ router.get("/api/GetAllHeroes", function(req, res, next) {
 
 //Add A Hero
 router.post("/api/AddNewHero", function(req, res, next) {
-    console.log(req.body);
     Heroes.create(req.body)
         .then(function(result){
             res.send(result);
@@ -109,9 +109,12 @@ router.get("/api/GetHeroByUrl", function(req, res, next) {
         }).catch(next);
 });
 
-//Delete a hero by name
-router.delete("/api/DeleteByName", function(req, res, next) {
-    Heroes.findOneAndDelete({name: req.query.name, alias: req.query.alias})
+//Delete a hero by url
+router.delete("/api/DeleteByUrl", function(req, res, next) {
+    fs.unlink(`/Users/sagnikpaul28/Documents/dc-wiki/client/src${req.body.characterImage}`);
+    fs.unlink(`/Users/sagnikpaul28/Documents/dc-wiki/client/src${req.body.logoImage}`);
+    fs.unlink(`/Users/sagnikpaul28/Documents/dc-wiki/client/src${req.body.wallpaperImage}`);
+    Heroes.findOneAndDelete({url: req.query.url})
         .then(function(result){
             res.send(result);
         }).catch(next);
@@ -121,40 +124,45 @@ router.delete("/api/DeleteByName", function(req, res, next) {
 router.post("/api/UploadImage", function(req, res, next) {
     let imageFile = req.files.fileImage;
     let logoFile = req.files.logoImage;
+    let wallpaperFile = req.files.wallpaperImage;
     let fileName = req.body.fileName;
 
     let fileExtension = imageFile.name.substring(imageFile.name.lastIndexOf('.') + 1, imageFile.name.length);
 
-    Heroes.find({url: fileName})
-        .then(result => {
+    //insert images in file
+    if (imageFile) {
 
-            //check if item already exists in db
-            if (result.length === 0) {
-
-                //insert images in file
-                imageFile.mv(`/Users/sagnikpaul28/Documents/dc-wiki/client/src/img/characters/${fileName}.${fileExtension}`, function(err) {
-                    if (err) {
-                        console.log(err);
-                        return res.status(500).send(err);
-                    }
-                });
-
-                //insert logo in file
-                logoFile.mv(`/Users/sagnikpaul28/Documents/dc-wiki/client/src/img/logo/${fileName}.${fileExtension}`, function(err) {
-                    if (err) {
-                        console.log(err);
-                        return res.status(500).send(err);
-                    }
-                });
-
-                res.send('success');
-
-            }else {
-
-                res.status(304).send('Already Exists');
-
+        imageFile.mv(`/Users/sagnikpaul28/Documents/dc-wiki/client/src/img/characters/${fileName}.${fileExtension}`, function(err) {
+            if (err) {
+                console.log(err);
+                return res.status(500).send(err);
             }
         });
+    }
+
+    //insert logo in file
+    if (logoFile){
+
+        logoFile.mv(`/Users/sagnikpaul28/Documents/dc-wiki/client/src/img/logo/${fileName}.${fileExtension}`, function(err) {
+            if (err) {
+                console.log(err);
+                return res.status(500).send(err);
+            }
+        });
+    }
+
+    //Insert wallpaper in file
+    if (wallpaperFile){
+
+        wallpaperFile.mv(`/Users/sagnikpaul28/Documents/dc-wiki/client/src/img/wallpapers/${fileName}.${fileExtension}`, function(err) {
+            if (err) {
+                console.log(err);
+                return res.status(500).send(err);
+            }
+        });
+    }
+
+    res.send('success');
 });
 
 app.use('/', router);

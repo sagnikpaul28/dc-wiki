@@ -21,7 +21,7 @@ export class SingleCharacter extends React.Component {
                 this.setState({
                     character: results.map( character => {
 
-                        character.wallpaper = '/img/wallpapers/' + character.imageUrl;
+                        character.wallpaper = '/img/wallpapers/' + character.wallpaperUrl;
                         character.imageUrl = '/img/characters/' + character.imageUrl;
                         character.logoUrl = '/img/logo/' + character.logoUrl;
 
