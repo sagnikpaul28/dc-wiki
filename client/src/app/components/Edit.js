@@ -1,45 +1,78 @@
-import React from "react";
+import React from 'react';
+import { EditCharacterModal } from './EditCharacterModal';
 
-export class Edit extends React.Component {
-
+export class Edit extends React.Component{
     constructor() {
         super();
 
         this.state = {
-            characters: []
+            items: [],
+            item: ''
         }
     }
 
+    callEditCharacterModalComponent( item ) {
+        this.setState({
+            item: item
+        });
+        document.querySelector('body').style.overflow = 'hidden';
+    }
+
     componentDidMount() {
-        fetch("http://localhost:4000/api/GetAllHeroes?key=name&sort=asc")
-            .then(results => results.json())
-            .then(results => {
+        this.fetchCharacters();
+    }
+
+    fetchCharacters() {
+        fetch('http://localhost:4000/api/GetAllHeroes')
+            .then(result => result.json())
+            .then(result => {
                 this.setState({
-                    characters: results.map( item => {
+                    items: result.map((item) => {
+
+                        item.wallpaperUrl = "/img/wallpapers/" + item.wallpaperUrl;
+                        item.imageUrl = "/img/characters/" + item.imageUrl;
+                        item.logoUrl = "/img/logo/" + item.logoUrl;
+
                         return(
-                            <div key={item.name} className="character-item">
-                                <div className="character-left">
-                                    <span>{item.name}</span> - <span>{item.alias}</span>
+                            <div className="items" key={item.name} onClick={() => this.callEditCharacterModalComponent( item )} >
+                                <div className="image">
+                                    <img src={item.imageUrl} />
                                 </div>
-                                <div className="character-right">
-                                    <button className="edit-button">Edit</button>
-                                    <button className="delete-button">Delete</button>
-                                </div>
+                                <p>{item.name}</p>
+                                <p>{item.alias}</p>
+                                <hr />
                             </div>
-                        );
+                        )
                     })
                 })
             })
     }
 
+    onEditComponentSave() {
+        this.fetchCharacters();
+        this.forceUpdate();
+    }
+
+    onEditComponentClose() {
+        this.setState({
+            item: ''
+        });
+        this.fetchCharacters();
+        document.querySelector('body').style.overflow = 'initial';
+    }
+
     render() {
-        return (
-            <div className="edit">
-                <h1>List Of All Characters
-                    <button className="add-new" onClick={() => console.log('A')}>+</button>
-                </h1>
-                <br/>
-                {this.state.characters}
+        let editModal = '';
+        if (this.state.item !== '') {
+            editModal = <EditCharacterModal item={this.state.item} onCloseFunction={this.onEditComponentClose.bind(this)} onSaveFunction={this.onEditComponentSave.bind(this)}/>;
+        }else {
+            editModal = '';
+        }
+
+        return(
+            <div className="modify-character-div">
+                {this.state.items}
+                {editModal}
             </div>
         );
     }

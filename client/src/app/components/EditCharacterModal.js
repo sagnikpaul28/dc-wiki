@@ -22,6 +22,16 @@ export class EditCharacterModal extends React.Component {
         };
     }
 
+    componentDidMount() {
+        //Store this in variable thisObject
+        let thisObject = this;
+        document.addEventListener('click', function(event){
+            if (event.target.className === 'modal') {
+                thisObject.props.onCloseFunction();
+            }
+        });
+    }
+
     //save changes
     onSave() {
         let obj = {};

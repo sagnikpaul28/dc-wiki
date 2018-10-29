@@ -18,6 +18,7 @@ export class AddCharacter extends React.Component {
             message: ""
         };
     }
+
     onChangeInput(event) {
         let property = event.target;
         let propertyName = event.target.name;
