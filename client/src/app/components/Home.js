@@ -6,7 +6,8 @@ export class Home extends React.Component {
         super();
 
         this.state = {
-            items: []
+            items: [],
+            search: ''
         };
     }
 
@@ -34,8 +35,9 @@ export class Home extends React.Component {
                                           <img src={item.imageUrl}/>
                                       </div>
                                       <div className="content-layer">
-                                          <img src={item.logoUrl} className="logo"/>
+                                          <h2 className="alias">{item.alias}</h2>
                                           <h1 className="name">{item.name}</h1>
+                                          <hr />
                                       </div>
                                   </Link>
                               </div>
@@ -53,7 +55,8 @@ export class Home extends React.Component {
 
     render() {
         return (
-            <div className="items">
+            <div className="index">
+                <img src="/img/logo.png" className="logo"/>
                 {this.state.items}
             </div>
         );
