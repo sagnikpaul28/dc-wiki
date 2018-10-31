@@ -18,7 +18,8 @@ export class EditCharacterModal extends React.Component {
             characterImage: this.props.item.imageUrl,
             wallpaperImage: this.props.item.wallpaperUrl,
             logoImage: this.props.item.logoUrl,
-            message: ''
+            message: '',
+            version: 0
         };
     }
 
@@ -108,7 +109,11 @@ export class EditCharacterModal extends React.Component {
                 }).then(res => {
                     if (res.status === 200) {
                         this.setState({
-                            message: 'Uploaded'
+                            version: this.state.version++,
+                            message: 'Uploaded',
+                            characterImage: this.state.characterImage + "?v=" + this.state.version,
+                            wallpaperImage: this.state.wallpaperImage + "?v=" + this.state.version,
+                            logoImage: this.state.logoImage + "?v=" + this.state.version
                         });
                     }
                 })
@@ -132,7 +137,7 @@ export class EditCharacterModal extends React.Component {
             }).then(res => res.json())
                 .then(() => {
                     this.setState({
-                        message: 'Saved. Refresh the page to see the changes.'
+                        message: 'Saved.'
                     });
                     this.props.onSaveFunction();
                 })
