@@ -14,10 +14,22 @@ export class SingleCharacter extends React.Component {
         SingleCharacter.forceUpdate();
     }
 
-    componentDidMount(){
+    //changing the page title
+    changePageTitle(title, alias) {
+        let pageTitle = title;
+        if (alias) {
+            pageTitle += ' | ' + alias;
+        }
+        document.title = pageTitle;
+    }
+
+    fetchCharacterDetails() {
         fetch("http://localhost:4000/api/GetHeroByUrl?name="+this.props.match.params.name)
             .then(results => results.json())
             .then(results => {
+
+                this.changePageTitle(results[0].name, results[0].alias);
+
                 this.setState({
                     character: results.map( character => {
 
@@ -39,6 +51,7 @@ export class SingleCharacter extends React.Component {
                                 <div className="image-container" >
                                     <img src={character.imageUrl} />
                                 </div>
+
                                 <div className="detail-container" >
                                     <h1>{character.name}</h1>
                                     {character.byLine}
@@ -46,6 +59,7 @@ export class SingleCharacter extends React.Component {
                                     <p className="first-apperance">First Appearance: {character.firstAppearance}</p>
                                     <p className="summary">{character.summary}</p>
                                 </div>
+
                                 <div className="other-container">
                                     <p>{character.description}</p>
                                     <p className="powers">Powers: <span>{character.powers}</span></p>
@@ -64,6 +78,10 @@ export class SingleCharacter extends React.Component {
             }, error => {
                 console.log(error);
             })
+    }
+
+    componentDidMount() {
+        this.fetchCharacterDetails();
     }
 
     render() {
