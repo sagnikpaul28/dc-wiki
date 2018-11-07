@@ -1,5 +1,6 @@
 import React from 'react';
 import { EditCharacterModal } from './EditCharacterModal';
+import {Link} from "react-router-dom";
 let configFile = require('../config');
 
 export class Edit extends React.Component{
@@ -70,8 +71,10 @@ export class Edit extends React.Component{
 
         return(
             <div className="modify-character-div">
+                <p>Select a Character To Edit</p>
                 {this.state.items}
                 {editModal}
+                <Link to={ "/edit/add" } >+</Link>
             </div>
         );
     }
