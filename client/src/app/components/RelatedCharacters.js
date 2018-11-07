@@ -1,6 +1,8 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import {SingleCharacter} from "./SingleCharacter";
+let configFile = require('../config');
+
 
 export class RelatedCharacters extends React.Component {
     constructor(props) {
@@ -12,7 +14,11 @@ export class RelatedCharacters extends React.Component {
     }
 
     componentDidMount() {
-        fetch("http://localhost:4000/api/GetHeroByUrl?name="+this.props.otherCharacter.trim())
+        fetch("http://localhost:4000/api/GetHeroByUrl?name="+this.props.otherCharacter.trim(), {
+            headers: {
+                'Authorization': configFile.apiAuthorizationToken
+            }
+        })
             .then(results => results.json())
             .then(results => {
                 this.setState({

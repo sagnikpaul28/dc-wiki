@@ -1,5 +1,6 @@
 import React from 'react';
 import { EditCharacterModal } from './EditCharacterModal';
+let configFile = require('../config');
 
 export class Edit extends React.Component{
     constructor() {
@@ -23,7 +24,11 @@ export class Edit extends React.Component{
     }
 
     fetchCharacters() {
-        fetch('http://localhost:4000/api/GetAllHeroes')
+        fetch('http://localhost:4000/api/GetAllHeroes', {
+            headers: {
+                'Authorization': configFile.apiAuthorizationToken
+            }
+        })
             .then(result => result.json())
             .then(result => {
                 this.setState({
@@ -31,7 +36,6 @@ export class Edit extends React.Component{
 
                         item.wallpaperUrl = "/img/wallpapers/" + item.wallpaperUrl;
                         item.imageUrl = "/img/characters/" + item.imageUrl;
-                        item.logoUrl = "/img/logo/" + item.logoUrl;
 
                         return(
                             <div className="items" key={item.name} onClick={() => this.callEditCharacterModalComponent( item )} >
@@ -62,12 +66,7 @@ export class Edit extends React.Component{
     }
 
     render() {
-        let editModal = '';
-        if (this.state.item !== '') {
-            editModal = <EditCharacterModal item={this.state.item} onCloseFunction={this.onEditComponentClose.bind(this)} onSaveFunction={this.onEditComponentSave.bind(this)}/>;
-        }else {
-            editModal = '';
-        }
+        let editModal = (this.state.item !== '') ? <EditCharacterModal item={this.state.item} onCloseFunction={this.onEditComponentClose.bind(this)} onSaveFunction={this.onEditComponentSave.bind(this)}/> : '';
 
         return(
             <div className="modify-character-div">

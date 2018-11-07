@@ -8,7 +8,6 @@ import { Edit } from './components/Edit';
 import { AddCharacter } from "./components/AddCharacter";
 import { Error} from './components/404';
 
-
 class App extends React.Component {
     render() {
         return (

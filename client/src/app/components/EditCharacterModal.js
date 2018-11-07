@@ -1,4 +1,5 @@
 import React from "react";
+let configFile = require('../config');
 
 export class EditCharacterModal extends React.Component {
     constructor(props) {
@@ -17,7 +18,6 @@ export class EditCharacterModal extends React.Component {
             powers: this.props.item.powers,
             characterImage: this.props.item.imageUrl,
             wallpaperImage: this.props.item.wallpaperUrl,
-            logoImage: this.props.item.logoUrl,
             message: '',
             version: 0
         };
@@ -65,14 +65,16 @@ export class EditCharacterModal extends React.Component {
         if (this.state.relatedCharacters !== this.props.item.relatedCharacters) {
             obj['relatedCharacters'] = this.state.relatedCharacters;
         }
-        obj['url'] = this.props.item.url;
+        if (this.state.url !== this.props.item.url) {
+            obj['url'] = this.state.url;
+        }
+        obj['actualUrl'] = this.props.item.url;
 
         let characterImage = this.uploadImage.files[0];
-        let logoImage = this.uploadLogo.files[0];
         let wallpaperImage = this.uploadWallpaper.files[0];
 
         //Check if any item is modified
-        if (Object.keys(obj).length === 1 && !(characterImage || logoImage || wallpaperImage)) {
+        if (Object.keys(obj).length === 1 && !(characterImage || wallpaperImage)) {
             this.setState({
                 message: 'Nothing to Save'
             });
@@ -82,17 +84,13 @@ export class EditCharacterModal extends React.Component {
         }else {
 
             //Check if images are uploaded
-            if (characterImage || logoImage || wallpaperImage) {
+            if (characterImage || wallpaperImage) {
 
                 const data = new FormData();
                 data.append('fileName', this.props.item.url);
 
                 if (characterImage) {
                     data.append('fileImage', characterImage);
-                }
-
-                if (logoImage) {
-                    data.append('logoImage', logoImage);
                 }
 
                 if (wallpaperImage) {
@@ -106,14 +104,16 @@ export class EditCharacterModal extends React.Component {
                 fetch("http://localhost:4000/api/UploadImage", {
                     method: "POST",
                     body: data,
+                    headers: {
+                        'Authorization': configFile.apiAuthorizationToken
+                    }
                 }).then(res => {
                     if (res.status === 200) {
                         this.setState({
                             version: this.state.version++,
                             message: 'Uploaded',
                             characterImage: this.state.characterImage + "?v=" + this.state.version,
-                            wallpaperImage: this.state.wallpaperImage + "?v=" + this.state.version,
-                            logoImage: this.state.logoImage + "?v=" + this.state.version
+                            wallpaperImage: this.state.wallpaperImage + "?v=" + this.state.version
                         });
                     }
                 })
@@ -132,7 +132,8 @@ export class EditCharacterModal extends React.Component {
                 method: 'POST',
                 body: obj,
                 headers: {
-                    'Content-Type':'application/json'
+                    'Content-Type':'application/json',
+                    'Authorization': configFile.apiAuthorizationToken
                 }
             }).then(res => res.json())
                 .then(() => {
@@ -150,11 +151,11 @@ export class EditCharacterModal extends React.Component {
             method: 'DELETE',
             body: JSON.stringify({
                 characterImage: this.state.characterImage,
-                logoImage: this.state.logoImage,
                 wallpaperImage: this.state.wallpaperImage
             }),
             headers: {
-                'Content-Type':'application/json'
+                'Content-Type':'application/json',
+                'Authorization': configFile.apiAuthorizationToken
             }
         }).then(res => res.json())
             .then(() => {
@@ -220,11 +221,6 @@ export class EditCharacterModal extends React.Component {
                             <label>Wallpaper Image:</label>
                             <img src={this.state.wallpaperImage} className="wallpaperImage" />
                             <input type="file" name="wallpaperUrl" className="form-input" ref={(ref) => { this.uploadWallpaper = ref; }} />
-                        </div>
-                        <div className="input-container">
-                            <label>Logo Image:</label>
-                            <img src={this.state.logoImage} className="logoImage"/>
-                            <input type="file" name="logoUrl" className="form-input" ref={(ref) => { this.uploadLogo = ref; }}/>
                         </div>
                         <div className="input-container">
                             <input type="text" name="accentColor" className="form-input filled" onChange={this.onChangeInput.bind(this)} value={this.state.accentColor} />

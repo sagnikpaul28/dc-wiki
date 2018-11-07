@@ -1,4 +1,5 @@
 import React from "react";
+let configFile = require('../config');
 
 export class AddCharacter extends React.Component {
     constructor() {
@@ -75,23 +76,28 @@ export class AddCharacter extends React.Component {
 
         //Save the file to FormData object
         let fileImage = this.uploadImage.files[0];
-        let logoImage = this.uploadLogo.files[0];
         let wallpaperImage = this.uploadWallpaper.files[0];
 
         const data = new FormData();
 
         data.append('fileImage', fileImage);
-        data.append('logoImage', logoImage);
         data.append('wallpaperImage', wallpaperImage);
         data.append('fileName', this.state.url);
 
-        fetch(`http://localhost:4000/api/GetHeroByUrl?name=${this.state.url}`)
+        fetch(`http://localhost:4000/api/GetHeroByUrl?name=${this.state.url}`, {
+            headers: {
+                'Authorization': configFile.apiAuthorizationToken
+            }
+        })
             .then(res => res.json())
             .then(res => {
                if (res.length === 0 ) {
                    fetch("http://localhost:4000/api/UploadImage", {
                        method: "POST",
                        body: data,
+                       headers: {
+                           'Authorization': configFile.apiAuthorizationToken
+                       }
                    }).then(res => {
                        if (res.status === 200) {
                            this.setState({
@@ -108,8 +114,7 @@ export class AddCharacter extends React.Component {
                                byLine: this.state.byLine,
                                relatedCharacters: this.state.relatedCharacters,
                                url: this.state.url,
-                               imageUrl: this.state.url + fileImage.name.substring( fileImage.name.lastIndexOf('.'), fileImage.name.length ),
-                               logoUrl: this.state.url + logoImage.name.substring( logoImage.name.lastIndexOf('.'), logoImage.name.length )
+                               imageUrl: this.state.url + fileImage.name.substring( fileImage.name.lastIndexOf('.'), fileImage.name.length )
                            };
                            data = JSON.stringify(data);
                            console.log(data);
@@ -119,6 +124,7 @@ export class AddCharacter extends React.Component {
                                body: data,
                                headers: {
                                    'Content-Type':'application/json',
+                                   'Authorization': configFile.apiAuthorizationToken
                                }
                            }).then(res => {
                                console.log(res);
@@ -138,7 +144,6 @@ export class AddCharacter extends React.Component {
                                        message: "Uploaded successfully"
                                    });
                                    //Clear selected files
-                                   this.uploadLogo.value = null;
                                    this.uploadImage.value = null;
 
                                }else {
@@ -200,10 +205,6 @@ export class AddCharacter extends React.Component {
                     <div className="input-container">
                         <label>Character Image:</label>
                         <input type="file" name="imageUrl" className="form-input" ref={(ref) => { this.uploadImage = ref; }} />
-                    </div>
-                    <div className="input-container">
-                        <label>Logo Image:</label>
-                        <input type="file" name="logoUrl" className="form-input" ref={(ref) => { this.uploadLogo = ref; }}/>
                     </div>
                     <div className="input-container">
                         <label>Wallpaper Image:</label>

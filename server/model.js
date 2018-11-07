@@ -13,10 +13,6 @@ const heroesSchema = new Schema({
         type: String,
         required: true
     },
-    logoUrl: {
-        type: String,
-        required: true
-    },
     wallpaperUrl: {
         type: String,
         required: true
@@ -26,25 +22,32 @@ const heroesSchema = new Schema({
         required: true
     },
     summary: {
-        type: String
+        type: String,
+        required: true
     },
     description: {
-        type: String
+        type: String,
+        required: true
     },
     byLine: {
-        type: String
+        type: String,
+        required: true
     },
     powers: {
-        type: String
+        type: String,
+        required: true
     },
     firstAppearance: {
-        type: String
+        type: String,
+        required: true
     },
     relatedCharacters: {
-        type: String
+        type: String,
+        required: true
     },
     url: {
-        type: String
+        type: String,
+        required: true
     }
 });
 

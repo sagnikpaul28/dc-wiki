@@ -1,5 +1,7 @@
 import React from 'react';
 import { RelatedCharacters } from "./RelatedCharacters";
+let configFile = require('../config');
+
 
 export class SingleCharacter extends React.Component {
     constructor() {
@@ -24,7 +26,11 @@ export class SingleCharacter extends React.Component {
     }
 
     fetchCharacterDetails() {
-        fetch("http://localhost:4000/api/GetHeroByUrl?name="+this.props.match.params.name)
+        fetch("http://localhost:4000/api/GetHeroByUrl?name="+this.props.match.params.name, {
+            headers: {
+                'Authorization': configFile.apiAuthorizationToken
+            }
+        })
             .then(results => results.json())
             .then(results => {
 
@@ -35,7 +41,6 @@ export class SingleCharacter extends React.Component {
 
                         character.wallpaper = '/img/wallpapers/' + character.wallpaperUrl;
                         character.imageUrl = '/img/characters/' + character.imageUrl;
-                        character.logoUrl = '/img/logo/' + character.logoUrl;
 
                         character.byLine = character.byLine ? <p className="byline">{character.byLine}</p> : null;
 
@@ -87,6 +92,9 @@ export class SingleCharacter extends React.Component {
     render() {
         return(
             <div className="main-container">
+                <a href="/" >
+                    <img src="/img/logo.png" className="single-page-logo"/>
+                </a>
                 {this.state.character}
             </div>
         )
