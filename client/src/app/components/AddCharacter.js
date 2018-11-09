@@ -5,6 +5,10 @@ export class AddCharacter extends React.Component {
     constructor() {
         super();
 
+        if (localStorage.getItem('ok') !== 'ok') {
+            window.location.href = '/edit';
+        }
+
         this.state = {
             name: "",
             alias: "",
@@ -167,61 +171,63 @@ export class AddCharacter extends React.Component {
     }
 
     render() {
-        return(
-            <div className="add-character-container">
-                <form className="form" onSubmit={ this.onFormSubmit.bind(this) }>
-                    <div className="input-container">
-                        <input type="text" name="name" className="form-input" onChange={this.onChangeInput.bind(this)} value={this.state.name} />
-                        <label>Name:</label>
-                    </div>
-                    <div className="input-container">
-                        <input type="text" name="alias" className="form-input" onChange={this.onChangeInput.bind(this)} value={this.state.alias} />
-                        <label>Real Name:</label>
-                    </div>
-                    <div className="input-container">
-                        <input type="text" name="firstAppearance" className="form-input" onChange={this.onChangeInput.bind(this)} value={this.state.firstAppearance} />
-                        <label>First Appearance:</label>
-                    </div>
-                    <div className="input-container">
-                        <input type="text" name="superpowers" className="form-input" onChange={this.onChangeInput.bind(this)} value={this.state.superpowers} />
-                        <label>Superpowers (separated by comma):</label>
-                    </div>
-                    <div className="input-container">
-                        <input type="text" name="summary" className="form-input" onChange={this.onChangeInput.bind(this)} value={this.state.summary} />
-                        <label>Summary:</label>
-                    </div>
-                    <div className="input-container">
-                        <input type="text" name="description" className="form-input" onChange={this.onChangeInput.bind(this)} value={this.state.description} />
-                        <label>Description:</label>
-                    </div>
-                    <div className="input-container">
-                        <input type="text" name="byLine" className="form-input" onChange={this.onChangeInput.bind(this)} value={this.state.byLine} />
-                        <label>Byline:</label>
-                    </div>
-                    <div className="input-container">
-                        <input type="text" name="relatedCharacters" className="form-input" onChange={this.onChangeInput.bind(this)} value={this.state.relatedCharacters} />
-                        <label>Related Characters (separated by comma):</label>
-                    </div>
-                    <div className="input-container">
-                        <label>Character Image:</label>
-                        <input type="file" name="imageUrl" className="form-input" ref={(ref) => { this.uploadImage = ref; }} />
-                    </div>
-                    <div className="input-container">
-                        <label>Wallpaper Image:</label>
-                        <input type="file" name="wallpaperUrl" className="form-input" ref={(ref) => { this.uploadWallpaper = ref; }}/>
-                    </div>
-                    <div className="input-container">
-                        <input type="text" name="accentColor" className="form-input" onChange={this.onChangeInput.bind(this)} value={this.state.accentColor} />
-                        <label>Accent Color (in hex):</label>
-                    </div>
-                    <div className="input-container">
-                        <input type="text" name="url" className="form-input" onChange={this.onChangeInput.bind(this)} value={this.state.url} />
-                        <label>Url:</label>
-                    </div>
-                    <p>{this.state.message}</p>
-                    <button type="submit">Submit</button>
-                </form>
-            </div>
-        );
+        if (localStorage.getItem('ok')){
+            return(
+                <div className="add-character-container">
+                    <form className="form" onSubmit={ this.onFormSubmit.bind(this) }>
+                        <div className="input-container">
+                            <input type="text" name="name" className="form-input" onChange={this.onChangeInput.bind(this)} value={this.state.name} />
+                            <label>Name:</label>
+                        </div>
+                        <div className="input-container">
+                            <input type="text" name="alias" className="form-input" onChange={this.onChangeInput.bind(this)} value={this.state.alias} />
+                            <label>Real Name:</label>
+                        </div>
+                        <div className="input-container">
+                            <input type="text" name="firstAppearance" className="form-input" onChange={this.onChangeInput.bind(this)} value={this.state.firstAppearance} />
+                            <label>First Appearance:</label>
+                        </div>
+                        <div className="input-container">
+                            <input type="text" name="superpowers" className="form-input" onChange={this.onChangeInput.bind(this)} value={this.state.superpowers} />
+                            <label>Superpowers (separated by comma):</label>
+                        </div>
+                        <div className="input-container">
+                            <input type="text" name="summary" className="form-input" onChange={this.onChangeInput.bind(this)} value={this.state.summary} />
+                            <label>Summary:</label>
+                        </div>
+                        <div className="input-container">
+                            <input type="text" name="description" className="form-input" onChange={this.onChangeInput.bind(this)} value={this.state.description} />
+                            <label>Description:</label>
+                        </div>
+                        <div className="input-container">
+                            <input type="text" name="byLine" className="form-input" onChange={this.onChangeInput.bind(this)} value={this.state.byLine} />
+                            <label>Byline:</label>
+                        </div>
+                        <div className="input-container">
+                            <input type="text" name="relatedCharacters" className="form-input" onChange={this.onChangeInput.bind(this)} value={this.state.relatedCharacters} />
+                            <label>Related Characters (separated by comma):</label>
+                        </div>
+                        <div className="input-container">
+                            <label>Character Image:</label>
+                            <input type="file" name="imageUrl" className="form-input" ref={(ref) => { this.uploadImage = ref; }} />
+                        </div>
+                        <div className="input-container">
+                            <label>Wallpaper Image:</label>
+                            <input type="file" name="wallpaperUrl" className="form-input" ref={(ref) => { this.uploadWallpaper = ref; }}/>
+                        </div>
+                        <div className="input-container">
+                            <input type="text" name="accentColor" className="form-input" onChange={this.onChangeInput.bind(this)} value={this.state.accentColor} />
+                            <label>Accent Color (in hex):</label>
+                        </div>
+                        <div className="input-container">
+                            <input type="text" name="url" className="form-input" onChange={this.onChangeInput.bind(this)} value={this.state.url} />
+                            <label>Url:</label>
+                        </div>
+                        <p>{this.state.message}</p>
+                        <button type="submit">Submit</button>
+                    </form>
+                </div>
+            );
+        }
     }
 }

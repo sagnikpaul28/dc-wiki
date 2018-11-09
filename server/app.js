@@ -191,9 +191,9 @@ router.post("/api/UploadImage", function(req, res, next) {
 
 router.post("/api/CheckPassword", function(req, res, next) {
     if (req.body.message === 'IAmBatman' ) {
-        res.send('okay');
+        res.status(200).send('okay');
     }else {
-        res.send('incorrect password');
+        res.status(403).send('incorrect password');
     }
 });
 
