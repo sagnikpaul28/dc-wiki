@@ -533,12 +533,16 @@ Single Character
 .single-character-div{
     width: 90%;
     max-width: 1000px;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
     margin: 480px auto 0;
     color: black;
     padding-bottom: 100px;
+}
+@media screen and (min-width: 992px) {
+    .single-character-div{
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
 }
 .single-character-div .character-banner{
     position: absolute;
@@ -576,23 +580,42 @@ Single Character
 }
 .single-character-div .image-container {
     position: relative;
-    flex-basis: 240px;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto -230px;
+}
+@media screen and (min-width: 992px) {
+    .single-character-div .image-container {
+        flex-basis: 240px;
+        margin-bottom: 0;
+    }
 }
 .single-character-div .image-container img{
     height: 100%;
     width: 100%;
     object-fit: cover;
-    top: -180px;
+    top: -250px;
     position: relative;
     border: 2px solid #ffffff;
     box-shadow: 0 0 10px 5px #00000055;
+    max-height: 600px;
+}
+@media screen and (min-width: 992px) {
+    .single-character-div .image-container img {
+        max-height: unset;
+        top: -180px;
+    }
 }
 .single-character-div .detail-container{
     flex: 1;
     position: relative;
-    margin-left: 40px;
     padding: 80px 0 120px;
     top: -80px;
+}
+@media screen and (min-width: 992px) {
+    .single-character-div .detail-container{
+        margin-left: 40px;
+    }
 }
 .single-character-div .detail-container h1{
     margin: 10px 0 0;
@@ -635,6 +658,12 @@ Single Character
     margin: 0;
     justify-content: space-between;
     width: 100%;
+}
+@media screen and (min-width: 550px) {
+    .single-character-div .other-container .related-characters {
+        height: 360px;
+        overflow: hidden;
+    }
 }
 .single-character-div .other-container .related-characters .related-character-item {
     flex-basis: 155px;

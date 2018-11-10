@@ -105,8 +105,15 @@ export class SearchCharacterInput extends React.Component {
     componentDidMount() {
         let $this = this;
 
+        if (window.innerWidth <= 768) {
+            this.setState({
+                isOpen: 1
+            });
+            document.querySelectorAll('input[name=search]')[0].classList = '';
+        }
+
         document.addEventListener('click', function(event) {
-            if (!event.target.closest('.search-div')) {
+            if (!event.target.closest('.search-div') && window.innerWidth > 768 ) {
                 document.querySelectorAll('input[name=search]')[0].classList = 'hide';
                 $this.setState({
                     isOpen: 0
