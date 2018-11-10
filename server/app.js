@@ -20,7 +20,7 @@ app.use(fileUpload());
 
 
 //Setup Mongoose
-mongoose.connect("mongodb://localhost/dc");
+mongoose.connect("mongodb://sagnikpaul:SagnikPaul28@ds145562.mlab.com:45562/dc-wiki");
 mongoose.Promise = global.Promise;
 
 
@@ -209,6 +209,6 @@ app.use(function(err, req, res, next) {
 });
 
 
-app.listen(process.env.port || 4000, function(){
+app.listen(process.env.Port || 4000, function(){
     console.log('Node is running on port 4000');
 });
