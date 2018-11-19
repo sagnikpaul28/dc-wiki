@@ -38,7 +38,7 @@ export class Home extends React.Component {
                                 };
 
                                 //Fetch directory of images
-                                item.imageUrl = "/img/characters/" + item.imageUrl;
+                                item.imageUrl = "https://s3.ap-south-1.amazonaws.com/dc-wiki-project/characters/" + item.imageUrl;
 
                                 return (
                                     <div className="item" key={item._id}>

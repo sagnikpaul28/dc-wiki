@@ -39,8 +39,8 @@ export class SingleCharacter extends React.Component {
                 this.setState({
                     character: results.map( character => {
 
-                        character.wallpaper = '/img/wallpapers/' + character.wallpaperUrl;
-                        character.imageUrl = '/img/characters/' + character.imageUrl;
+                        character.wallpaper = "https://s3.ap-south-1.amazonaws.com/dc-wiki-project/wallpapers/" + character.wallpaperUrl;
+                        character.imageUrl = "https://s3.ap-south-1.amazonaws.com/dc-wiki-project/characters/" + character.imageUrl;
 
                         character.byLine = character.byLine ? <p className="byline">{character.byLine}</p> : null;
 

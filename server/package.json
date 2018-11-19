@@ -9,9 +9,10 @@
   "author": "Sagnik Paul",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.358.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
-    "express": "^4.16.3",
+    "express": "^4.16.4",
     "express-fileupload": "^1.0.0",
     "mongoose": "^5.3.0"
   },

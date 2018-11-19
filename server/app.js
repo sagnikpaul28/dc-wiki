@@ -3,7 +3,35 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
-const fs = require('fs');
+const AWS = require('aws-sdk');
+
+//Setup Mongoose
+mongoose.connect("mongodb://sagnikpaul:SagnikPaul28@ds145562.mlab.com:45562/dc-wiki");
+mongoose.Promise = global.Promise;
+
+
+const env = {
+    AWS_ACCESS_KEY: 'AKIAIIK3KWPKGBDHUK3A', // change to yours
+    AWS_SECRET_ACCESS_KEY: 'vi/9E1r/JkoYd1DreHrIuRv6uneTjiydZt2CjU43', // change to yours
+    REGION : 'ap-south-1', // change to yours
+    Bucket: 'dc-wiki-project' // change to yours
+};
+
+const s3Client = new AWS.S3({
+    accessKeyId: env.AWS_ACCESS_KEY,
+    secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
+    region : env.REGION
+});
+
+const uploadParams = {
+    Bucket: env.Bucket,
+    // Key: '', // pass key
+    // Body: null, // pass file body
+};
+
+const s3 = {};
+s3.s3Client = s3Client;
+s3.uploadParams = uploadParams;
 
 //Authorization Token
 let authorization = 'IAmBatman';
@@ -17,11 +45,6 @@ const app = express();
 
 app.use(cors());
 app.use(fileUpload());
-
-
-//Setup Mongoose
-mongoose.connect("mongodb://sagnikpaul:SagnikPaul28@ds145562.mlab.com:45562/dc-wiki");
-mongoose.Promise = global.Promise;
 
 
 //Setup BodyParser
@@ -141,8 +164,29 @@ router.delete("/api/DeleteByUrl", function(req, res, next) {
     if (req.header('Authorization') !== authorization) {
         res.status(401).send('Incorrect Authorization Token');
     }else {
-        fs.unlink(`/Users/sagnikpaul28/Documents/dc-wiki/client/src${req.body.characterImage}`);
-        fs.unlink(`/Users/sagnikpaul28/Documents/dc-wiki/client/src${req.body.wallpaperImage}`);
+        let s3Client = s3.s3Client;
+        let params = s3.uploadParams;
+
+        // let characterImage = req.body.characterImage;
+
+        params.Key = "characters/" + req.body.characterImage.substr(req.body.characterImage.lastIndexOf('/') + 1);
+        s3Client.deleteObject(params, function(err, data) {
+            if (err) {
+                console.log(err);
+                // res.status(500).json({error:"Error -> " + err});
+            }
+        });
+
+        params.Key = "wallpapers/" + req.body.wallpaperImage.substr(req.body.wallpaperImage.lastIndexOf('/') + 1);
+        s3Client.deleteObject(params, function(err, data) {
+            if (err) {
+                console.log(err);
+                // res.status(500).json({error:"Error -> " + err});
+            }
+        });
+
+        // fs.unlink(`/Users/sagnikpaul28/Documents/dc-wiki/client/src${req.body.characterImage}`);
+        // fs.unlink(`/Users/sagnikpaul28/Documents/dc-wiki/client/src${req.body.wallpaperImage}`);
         Heroes.findOneAndDelete({url: req.query.url})
             .then(function (result) {
                 res.send(result);
@@ -164,12 +208,25 @@ router.post("/api/UploadImage", function(req, res, next) {
 
             let imageFileExtension = imageFile.name.substring(imageFile.name.lastIndexOf('.') + 1, imageFile.name.length);
 
-            imageFile.mv(`/Users/sagnikpaul28/Documents/dc-wiki/client/src/img/characters/${fileName}.${imageFileExtension}`, function (err) {
+            let s3Client = s3.s3Client;
+            let params = s3.uploadParams;
+
+            params.Key = "characters/" + fileName + "." + imageFileExtension;
+            params.Body = imageFile.data;
+
+            // imageFile.mv(`/Users/sagnikpaul28/Documents/dc-wiki/client/src/img/characters/${fileName}.${imageFileExtension}`, function (err) {
+            //     if (err) {
+            //         console.log(err);
+            //         return res.status(500).send(err);
+            //     }
+            // });
+
+            s3Client.upload(params, (err, data) => {
                 if (err) {
-                    console.log(err);
-                    return res.status(500).send(err);
+                    res.status(500).json({error:"Error -> " + err});
                 }
             });
+
         }
 
         //Insert wallpaper in file
@@ -177,11 +234,24 @@ router.post("/api/UploadImage", function(req, res, next) {
 
             let wallpaperFileExtension = wallpaperFile.name.substring(wallpaperFile.name.lastIndexOf('.') + 1, wallpaperFile.name.length);
 
-            wallpaperFile.mv(`/Users/sagnikpaul28/Documents/dc-wiki/client/src/img/wallpapers/${fileName}.${wallpaperFileExtension}`, function (err) {
+            let s3Client = s3.s3Client;
+            let params = s3.uploadParams;
+
+            params.Key = 'wallpapers/' + fileName + "." + wallpaperFileExtension;
+            params.Body = wallpaperFile.data;
+
+            // wallpaperFile.mv(`/Users/sagnikpaul28/Documents/dc-wiki/client/src/img/wallpapers/${fileName}.${wallpaperFileExtension}`, function (err) {
+            //     if (err) {
+            //         console.log(err);
+            //         return res.status(500).send(err);
+            //     }
+            // });
+
+            s3Client.upload(params, (err, data) => {
                 if (err) {
-                    console.log(err);
-                    return res.status(500).send(err);
+                    res.status(500).json({error:"Error -> " + err});
                 }
+                delete params.Body;
             });
         }
 

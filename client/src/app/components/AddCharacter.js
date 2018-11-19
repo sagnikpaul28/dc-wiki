@@ -14,7 +14,7 @@ export class AddCharacter extends React.Component {
             alias: "",
             accentColor: "",
             firstAppearance: "",
-            superpowers: "",
+            powers: "",
             summary: "",
             description: "",
             byLine: "",
@@ -49,7 +49,7 @@ export class AddCharacter extends React.Component {
         event.preventDefault();
 
         //Check if any filed is empty
-        if (this.state.name.trim() === '' || this.state.alias.trim() === '' || this.state.firstAppearance.trim() === '' || this.state.superpowers.trim() === '' || this.state.accentColor.trim() === '' || this.state.summary.trim() === '' || this.state.description.trim() === '' || this.state.byLine.trim() === '' || this.state.relatedCharacters.trim() === '' || this.state.url.trim() === '' ) {
+        if (this.state.name.trim() === '' || this.state.alias.trim() === '' || this.state.firstAppearance.trim() === '' || this.state.powers.trim() === '' || this.state.accentColor.trim() === '' || this.state.summary.trim() === '' || this.state.description.trim() === '' || this.state.byLine.trim() === '' || this.state.relatedCharacters.trim() === '' || this.state.url.trim() === '' ) {
             this.setState({
                 message: 'Please fill out all the fields'
             });
@@ -112,13 +112,14 @@ export class AddCharacter extends React.Component {
                                alias: this.state.alias,
                                accentColor: this.state.accentColor,
                                firstAppearance: this.state.firstAppearance,
-                               superpowers: this.state.superpowers,
+                               powers: this.state.powers,
                                summary: this.state.summary,
                                description: this.state.description,
                                byLine: this.state.byLine,
                                relatedCharacters: this.state.relatedCharacters,
                                url: this.state.url,
-                               imageUrl: this.state.url + fileImage.name.substring( fileImage.name.lastIndexOf('.'), fileImage.name.length )
+                               imageUrl: this.state.url + fileImage.name.substring( fileImage.name.lastIndexOf('.'), fileImage.name.length ),
+                               wallpaperUrl: this.state.url + wallpaperImage.name.substring( wallpaperImage.name.lastIndexOf('.'), wallpaperImage.name.length )
                            };
                            data = JSON.stringify(data);
                            console.log(data);
@@ -139,7 +140,7 @@ export class AddCharacter extends React.Component {
                                        alias: "",
                                        accentColor: "",
                                        firstAppearance: "",
-                                       superpowers: "",
+                                       powers: "",
                                        summary: "",
                                        description: "",
                                        byLine: "",
@@ -188,7 +189,7 @@ export class AddCharacter extends React.Component {
                             <label>First Appearance:</label>
                         </div>
                         <div className="input-container">
-                            <input type="text" name="superpowers" className="form-input" onChange={this.onChangeInput.bind(this)} value={this.state.superpowers} />
+                            <input type="text" name="powers" className="form-input" onChange={this.onChangeInput.bind(this)} value={this.state.powers} />
                             <label>Superpowers (separated by comma):</label>
                         </div>
                         <div className="input-container">
