@@ -6,15 +6,15 @@ const cors = require('cors');
 const AWS = require('aws-sdk');
 
 //Setup Mongoose
-mongoose.connect("mongodb://sagnikpaul:SagnikPaul28@ds145562.mlab.com:45562/dc-wiki");
+mongoose.connect("");
 mongoose.Promise = global.Promise;
 
-
+//Setup AWS
 const env = {
-    AWS_ACCESS_KEY: 'AKIAIIK3KWPKGBDHUK3A', // change to yours
-    AWS_SECRET_ACCESS_KEY: 'vi/9E1r/JkoYd1DreHrIuRv6uneTjiydZt2CjU43', // change to yours
-    REGION : 'ap-south-1', // change to yours
-    Bucket: 'dc-wiki-project' // change to yours
+    AWS_ACCESS_KEY: '',
+    AWS_SECRET_ACCESS_KEY: '',
+    REGION : '',
+    Bucket: ''
 };
 
 const s3Client = new AWS.S3({
@@ -25,8 +25,6 @@ const s3Client = new AWS.S3({
 
 const uploadParams = {
     Bucket: env.Bucket,
-    // Key: '', // pass key
-    // Body: null, // pass file body
 };
 
 const s3 = {};
@@ -34,7 +32,7 @@ s3.s3Client = s3Client;
 s3.uploadParams = uploadParams;
 
 //Authorization Token
-let authorization = 'IAmBatman';
+let authorization = '';
 
 //Import Schema
 const Heroes = require("./model");
