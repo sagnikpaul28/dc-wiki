@@ -88,10 +88,14 @@ export class AddCharacter extends React.Component {
         data.append('wallpaperImage', wallpaperImage);
         data.append('fileName', this.state.url);
 
+        this.setState({
+            message: 'Uploading...'
+        });
+
         fetch(`http://localhost:4000/api/GetHeroByUrl?name=${this.state.url}`, {
             headers: {
                 'Authorization': configFile.apiAuthorizationToken
-            }
+            },
         })
             .then(res => res.json())
             .then(res => {
@@ -100,68 +104,65 @@ export class AddCharacter extends React.Component {
                        method: "POST",
                        body: data,
                        headers: {
-                           'Authorization': configFile.apiAuthorizationToken
+                           'Authorization': configFile.apiAuthorizationToken    
                        }
-                   }).then(res => {
-                       if (res.status === 200) {
-                           this.setState({
-                               message: 'Uploading'
-                           });
-                           let data = {
-                               name: this.state.name,
-                               alias: this.state.alias,
-                               accentColor: this.state.accentColor,
-                               firstAppearance: this.state.firstAppearance,
-                               powers: this.state.powers,
-                               summary: this.state.summary,
-                               description: this.state.description,
-                               byLine: this.state.byLine,
-                               relatedCharacters: this.state.relatedCharacters,
-                               url: this.state.url,
-                               imageUrl: this.state.url + fileImage.name.substring( fileImage.name.lastIndexOf('.'), fileImage.name.length ),
-                               wallpaperUrl: this.state.url + wallpaperImage.name.substring( wallpaperImage.name.lastIndexOf('.'), wallpaperImage.name.length )
-                           };
-                           data = JSON.stringify(data);
-                           console.log(data);
+                   })
+                   .then(res => res.json())
+                   .then(res => {
+                        this.setState({
+                            message: 'Saving...'
+                        });
+                        console.log(res);
+                        let data = {
+                            name: this.state.name,
+                            alias: this.state.alias,
+                            accentColor: this.state.accentColor,
+                            firstAppearance: this.state.firstAppearance,
+                            powers: this.state.powers,
+                            summary: this.state.summary,
+                            description: this.state.description,
+                            byLine: this.state.byLine,
+                            relatedCharacters: this.state.relatedCharacters,
+                            url: this.state.url,
+                            imageUrl: res.imageUrl,
+                            wallpaperUrl: res.wallpaperUrl
+                        };
+                        data = JSON.stringify(data);
+                        console.log(data);
 
-                           fetch("http://localhost:4000/api/AddNewHero", {
-                               method: "POST",
-                               body: data,
-                               headers: {
-                                   'Content-Type':'application/json',
-                                   'Authorization': configFile.apiAuthorizationToken
-                               }
-                           }).then(res => {
-                               console.log(res);
-                               if (res.status === 200) {
-                                   //Clear form fields
-                                   this.setState({
-                                       name: "",
-                                       alias: "",
-                                       accentColor: "",
-                                       firstAppearance: "",
-                                       powers: "",
-                                       summary: "",
-                                       description: "",
-                                       byLine: "",
-                                       relatedCharacters: "",
-                                       url: "",
-                                       message: "Uploaded successfully"
-                                   });
-                                   //Clear selected files
-                                   this.uploadImage.value = null;
+                        fetch("http://localhost:4000/api/AddNewHero", {
+                            method: "POST",
+                            body: data,
+                            headers: {
+                                'Content-Type':'application/json',
+                                'Authorization': configFile.apiAuthorizationToken
+                            }
+                        }).then(res => {
+                            console.log(res);
+                            if (res.status === 200) {
+                                //Clear form fields
+                                this.setState({
+                                    name: "",
+                                    alias: "",
+                                    accentColor: "",
+                                    firstAppearance: "",
+                                    powers: "",
+                                    summary: "",
+                                    description: "",
+                                    byLine: "",
+                                    relatedCharacters: "",
+                                    url: "",
+                                    message: "Uploaded successfully"
+                                });
+                                //Clear selected files
+                                this.uploadImage.value = null;
 
-                               }else {
-                                   this.setState({
-                                       message: 'Something went wrong. Try again.'
-                                   })
-                               }
-                           })
-                       }else{
-                           this.setState({
-                               message: 'Something went wrong'
-                           });
-                       }
+                            }else {
+                                this.setState({
+                                    message: 'Something went wrong. Try again.'
+                                })
+                            }
+                        });
                    });
                }else {
                    this.setState({

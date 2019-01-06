@@ -39,15 +39,12 @@ export class SingleCharacter extends React.Component {
                 this.setState({
                     character: results.map( character => {
 
-                        character.wallpaper = "https://s3.ap-south-1.amazonaws.com/dc-wiki-project/wallpapers/" + character.wallpaperUrl;
-                        character.imageUrl = "https://s3.ap-south-1.amazonaws.com/dc-wiki-project/characters/" + character.imageUrl;
-
                         character.byLine = character.byLine ? <p className="byline">{character.byLine}</p> : null;
 
                         return (
                             <div className="single-character-div" key={character._id} >
                                 <div className="character-banner">
-                                    <img src={character.wallpaper } />
+                                    <img src={character.wallpaperUrl } />
                                 </div>
                                 <div className="accent-break" style={ {borderColor: character.accentColor}} />
 

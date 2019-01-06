@@ -24,8 +24,6 @@ export class RelatedCharacters extends React.Component {
                 this.setState({
                     otherCharacter: results.map ( otherCharacter => {
 
-                        otherCharacter.imageUrl = "https://s3.ap-south-1.amazonaws.com/dc-wiki-project/characters/" + otherCharacter.imageUrl;
-
                         return (
                             <div className="related-character-item" key={otherCharacter.name}>
                                 <Link to={`/character/${otherCharacter.url}` } onClick={ () => SingleCharacter.changeCharacterFunction() } >

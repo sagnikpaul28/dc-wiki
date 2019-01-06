@@ -35,10 +35,7 @@ export class Home extends React.Component {
                                 //Set Accent Color
                                 let divStyles = {
                                     backgroundColor: item.accentColor
-                                };
-
-                                //Fetch directory of images
-                                item.imageUrl = "https://s3.ap-south-1.amazonaws.com/dc-wiki-project/characters/" + item.imageUrl;
+                                };                        
 
                                 return (
                                     <div className="item" key={item._id}>

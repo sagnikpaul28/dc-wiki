@@ -35,9 +35,6 @@ export class Edit extends React.Component{
                 this.setState({
                     items: result.map((item) => {
 
-                        item.wallpaperUrl = "https://s3.ap-south-1.amazonaws.com/dc-wiki-project/wallpapers/" + item.wallpaperUrl;
-                        item.imageUrl = "https://s3.ap-south-1.amazonaws.com/dc-wiki-project/characters/" + item.imageUrl;
-
                         return(
                             <div className="items" key={item.name} onClick={() => this.callEditCharacterModalComponent( item )} >
                                 <div className="image">

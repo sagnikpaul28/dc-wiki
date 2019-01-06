@@ -3,33 +3,27 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
-const AWS = require('aws-sdk');
+const multer = require('multer');
+const cloudinary = require('cloudinary');
+const path = require('path');
 
 //Setup Mongoose
 mongoose.connect("mongodb://sagnikpaul:SagnikPaul28@ds145562.mlab.com:45562/dc-wiki");
 mongoose.Promise = global.Promise;
 
-//Setup AWS
-const env = {
-    AWS_ACCESS_KEY: 'AKIAIZ5IMFTRCLGYUQTQ',
-    AWS_SECRET_ACCESS_KEY: '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',
-    REGION : 'ap-south-1',
-    Bucket: 'dc-wiki-project'
-};
 
-const s3Client = new AWS.S3({
-    accessKeyId: env.AWS_ACCESS_KEY,
-    secretAccessKey: env.AWS_SECRET_ACCESS_KEY,
-    region : env.REGION
+//Setup Cloudinary
+cloudinary.config({
+    cloud_name: 'dc-wiki',
+    api_key: '773376688586365',
+    api_secret: 'oQ89UWb4ik1sVJZNuRwAVqo4DpA'
 });
 
-const uploadParams = {
-    Bucket: env.Bucket,
-};
+//Setup Multer
+const upload = multer({
+    storage: multer.diskStorage({})
+});
 
-const s3 = {};
-s3.s3Client = s3Client;
-s3.uploadParams = uploadParams;
 
 //Authorization Token
 let authorization = 'IAmBatman';
@@ -42,13 +36,12 @@ const router = express.Router();
 const app = express();
 
 app.use(cors());
-app.use(fileUpload());
 
 
 //Setup BodyParser
-app.use(bodyParser.json());
+app.use(bodyParser.json()).use(bodyParser.urlencoded({ extended: true }));
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
@@ -56,18 +49,18 @@ app.use(function(req, res, next) {
 
 
 //Get Name in Ascending or Descending Order
-function compareAsc (a, b) {
+function compareAsc(a, b) {
     if (a.name > b.name) {
         return 1;
-    }else if (a.name < b.name) {
+    } else if (a.name < b.name) {
         return -1;
     }
     return 0;
 }
-function compareDesc (a, b) {
+function compareDesc(a, b) {
     if (a.name > b.name) {
         return -1;
-    }else if (a.name < b.name) {
+    } else if (a.name < b.name) {
         return 1;
     }
     return 0;
@@ -78,17 +71,17 @@ Get All Heroes
 Key = Name, Sort = ASC for ascending order of name
 Key = Name, Sort = DESC for descending order of name
 */
-router.get("/api/GetAllHeroes", function(req, res, next) {
+router.get("/api/GetAllHeroes", function (req, res, next) {
     if (req.header('Authorization') !== authorization) {
         res.status(401).send('Incorrect Authorization Token');
-    }else {
+    } else {
         Heroes.find({})
-            .then(function(result){
-                if (req.query.key){
-                    if (req.query.key.toLowerCase() === 'name'){
+            .then(function (result) {
+                if (req.query.key) {
+                    if (req.query.key.toLowerCase() === 'name') {
                         if (req.query.sort.toLowerCase() === 'asc') {
                             result.sort(compareAsc);
-                        }else if (req.query.sort.toLowerCase() === 'desc'){
+                        } else if (req.query.sort.toLowerCase() === 'desc') {
                             result.sort(compareDesc);
                         }
                     }
@@ -99,10 +92,10 @@ router.get("/api/GetAllHeroes", function(req, res, next) {
 });
 
 //Add A Hero
-router.post("/api/AddNewHero", function(req, res, next) {
+router.post("/api/AddNewHero", function (req, res, next) {
     if (req.header('Authorization') !== authorization) {
         res.status(401).send('Incorrect Authorization Token');
-    }else {
+    } else {
         Heroes.create(req.body)
             .then(function (result) {
                 res.send(result);
@@ -111,12 +104,12 @@ router.post("/api/AddNewHero", function(req, res, next) {
 });
 
 //Update A Hero by its url
-router.post("/api/UpdateAHero", function(req, res, next) {
+router.post("/api/UpdateAHero", function (req, res, next) {
     if (req.header('Authorization') !== authorization) {
         res.status(401).send('Incorrect Authorization Token');
-    }else {
+    } else {
         let url = req.body.actualUrl;
-        Heroes.findOneAndUpdate({url: url}, req.body)
+        Heroes.findOneAndUpdate({ url: url }, req.body)
             .then(function (result) {
                 res.send(result);
             }).catch(next);
@@ -124,10 +117,10 @@ router.post("/api/UpdateAHero", function(req, res, next) {
 });
 
 //Search for Heroes
-router.get("/api/SearchAHero", function(req, res, next) {
+router.get("/api/SearchAHero", function (req, res, next) {
     if (req.header('Authorization') !== authorization) {
         res.status(401).send('Incorrect Authorization Token');
-    }else {
+    } else {
         Heroes.find({})
             .then(function (result) {
                 let query = req.query.name;
@@ -143,12 +136,12 @@ router.get("/api/SearchAHero", function(req, res, next) {
 });
 
 //Get Hero By Url
-router.get("/api/GetHeroByUrl", function(req, res, next) {
+router.get("/api/GetHeroByUrl", function (req, res, next) {
     if (req.header('Authorization') !== authorization) {
         res.status(401).send('Incorrect Authorization Token');
-    }else {
+    } else {
         Heroes.find({})
-            .then( function(result)  {
+            .then(function (result) {
                 result = result.filter(obj => {
                     return obj.url === req.query.name.toLowerCase();
                 });
@@ -158,109 +151,113 @@ router.get("/api/GetHeroByUrl", function(req, res, next) {
 });
 
 //Delete a hero by url
-router.delete("/api/DeleteByUrl", function(req, res, next) {
+router.delete("/api/DeleteByUrl", function (req, res, next) {
     if (req.header('Authorization') !== authorization) {
         res.status(401).send('Incorrect Authorization Token');
-    }else {
-        let s3Client = s3.s3Client;
-        let params = s3.uploadParams;
+    } else {
 
-        // let characterImage = req.body.characterImage;
+        let characterImage = req.body.characterImage;
+        characterImagePublicId = characterImage.substring(characterImage.indexOf('characters/'), characterImage.lastIndexOf('.'));
 
-        params.Key = "characters/" + req.body.characterImage.substr(req.body.characterImage.lastIndexOf('/') + 1);
-        s3Client.deleteObject(params, function(err, data) {
-            if (err) {
-                console.log(err);
-                // res.status(500).json({error:"Error -> " + err});
+        let wallpaperImage = req.body.wallpaperImage;
+        wallpaperImagePublicId = wallpaperImage.substring(wallpaperImage.indexOf('wallpapers/'), wallpaperImage.lastIndexOf('.'));
+
+        cloudinary.v2.uploader.destroy(characterImagePublicId, function (error, result) {
+            if (error) {
+                res.status(500).json({ error: "Error -> " + error });
+                return;
+            } else {
+                cloudinary.v2.uploader.destroy(wallpaperImagePublicId, function (error, result) {
+                    if (error) {
+                        res.status(500).json({ error: "Error -> " + error });
+                        return;
+                    } else {
+                        Heroes.findOneAndDelete({ url: req.query.url })
+                            .then(function (result) {
+                                res.send(result);
+                            }).catch(next);
+                    }
+                });
             }
         });
-
-        params.Key = "wallpapers/" + req.body.wallpaperImage.substr(req.body.wallpaperImage.lastIndexOf('/') + 1);
-        s3Client.deleteObject(params, function(err, data) {
-            if (err) {
-                console.log(err);
-                // res.status(500).json({error:"Error -> " + err});
-            }
-        });
-
-        // fs.unlink(`/Users/sagnikpaul28/Documents/dc-wiki/client/src${req.body.characterImage}`);
-        // fs.unlink(`/Users/sagnikpaul28/Documents/dc-wiki/client/src${req.body.wallpaperImage}`);
-        Heroes.findOneAndDelete({url: req.query.url})
-            .then(function (result) {
-                res.send(result);
-            }).catch(next);
     }
 });
 
 //Upload Images
-router.post("/api/UploadImage", function(req, res, next) {
+app.post("/api/UploadImage", upload.fields([{ name: 'fileImage' }, { name: 'wallpaperImage' }]), function (req, res, next) {
     if (req.header('Authorization') !== authorization) {
         res.status(401).send('Incorrect Authorization Token');
-    }else {
+    } else {
+
         let imageFile = req.files.fileImage;
         let wallpaperFile = req.files.wallpaperImage;
         let fileName = req.body.fileName;
 
+        let wallpaperUrl = '';
+        let imageUrl = '';
+
+        let count = (imageFile ? 1 : 0) + (wallpaperFile ? 1 : 0);
+        let tempcount = 0;
+
         //insert images in file
         if (imageFile) {
 
-            let imageFileExtension = imageFile.name.substring(imageFile.name.lastIndexOf('.') + 1, imageFile.name.length);
+            cloudinary.v2.uploader.upload(
+                imageFile[0].path, {
+                    public_id: 'characters/' + fileName,
+                    invalidate: true
+                },
+                function (error, result) {
+                    if (error) {
+                        res.status(500).json({ error: "Error -> " + error });
+                        return;
+                    } else {
+                        imageUrl = result.url;
+                        tempcount++;
 
-            let s3Client = s3.s3Client;
-            let params = s3.uploadParams;
-
-            params.Key = "characters/" + fileName + "." + imageFileExtension;
-            params.Body = imageFile.data;
-
-            // imageFile.mv(`/Users/sagnikpaul28/Documents/dc-wiki/client/src/img/characters/${fileName}.${imageFileExtension}`, function (err) {
-            //     if (err) {
-            //         console.log(err);
-            //         return res.status(500).send(err);
-            //     }
-            // });
-
-            s3Client.upload(params, (err, data) => {
-                if (err) {
-                    res.status(500).json({error:"Error -> " + err});
-                }
-            });
+                        if (count === tempcount) {
+                            res.status(200).json({
+                                imageUrl: imageUrl,
+                                wallpaperUrl: wallpaperUrl
+                            });
+                        }
+                    }
+                });
 
         }
 
         //Insert wallpaper in file
         if (wallpaperFile) {
 
-            let wallpaperFileExtension = wallpaperFile.name.substring(wallpaperFile.name.lastIndexOf('.') + 1, wallpaperFile.name.length);
-
-            let s3Client = s3.s3Client;
-            let params = s3.uploadParams;
-
-            params.Key = 'wallpapers/' + fileName + "." + wallpaperFileExtension;
-            params.Body = wallpaperFile.data;
-
-            // wallpaperFile.mv(`/Users/sagnikpaul28/Documents/dc-wiki/client/src/img/wallpapers/${fileName}.${wallpaperFileExtension}`, function (err) {
-            //     if (err) {
-            //         console.log(err);
-            //         return res.status(500).send(err);
-            //     }
-            // });
-
-            s3Client.upload(params, (err, data) => {
-                if (err) {
-                    res.status(500).json({error:"Error -> " + err});
-                }
-                delete params.Body;
-            });
+            cloudinary.v2.uploader.upload(
+                wallpaperFile[0].path, {
+                    public_id: 'wallpapers/' + fileName,
+                    invalidate: true
+                },
+                function (error, result) {
+                    if (error) {
+                        res.status(500).json({ error: "Error -> " + error });
+                    } else {
+                        wallpaperUrl = result.url;
+                        tempcount++;
+                        
+                        if (count === tempcount) {
+                            res.status(200).json({
+                                imageUrl: imageUrl,
+                                wallpaperUrl: wallpaperUrl
+                            });
+                        }
+                    }
+                });
         }
-
-        res.send('success');
+        
     }
 });
 
-router.post("/api/CheckPassword", function(req, res, next) {
-    if (req.body.message === 'IAmBatman' ) {
+router.post("/api/CheckPassword", function (req, res, next) {
+    if (req.body.message === 'IAmBatman') {
         res.status(200).send('okay');
-    }else {
+    } else {
         res.status(403).send('incorrect password');
     }
 });
@@ -268,15 +265,15 @@ router.post("/api/CheckPassword", function(req, res, next) {
 app.use('/', router);
 
 //Error Handling
-app.use(function(err, req, res, next) {
-    if (err.name === "ValidationError"){
+app.use(function (err, req, res, next) {
+    if (err.name === "ValidationError") {
         res.status(422).send(err.message);
-    }else {
+    } else {
         console.log(err);
     }
 });
 
 
-app.listen(process.env.Port || 4000, function(){
+app.listen(process.env.Port || 4000, function () {
     console.log('Node is running on port 4000');
 });
