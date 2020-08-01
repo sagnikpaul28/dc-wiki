@@ -14,7 +14,7 @@ export class RelatedCharacters extends React.Component {
     }
 
     componentDidMount() {
-        fetch("http://localhost:4000/api/GetHeroByUrl?name="+this.props.otherCharacter.trim(), {
+        fetch("http://localhost:4000/api/get-hero-by-url?name="+this.props.otherCharacter.trim(), {
             headers: {
                 'Authorization': configFile.apiAuthorizationToken
             }

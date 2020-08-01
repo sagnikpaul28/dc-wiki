@@ -71,7 +71,7 @@ Get All Heroes
 Key = Name, Sort = ASC for ascending order of name
 Key = Name, Sort = DESC for descending order of name
 */
-router.get("/api/GetAllHeroes", function (req, res, next) {
+router.get("/api/get-all-heroes", function (req, res, next) {
     if (req.header('Authorization') !== authorization) {
         res.status(401).send('Incorrect Authorization Token');
     } else {
@@ -92,7 +92,7 @@ router.get("/api/GetAllHeroes", function (req, res, next) {
 });
 
 //Add A Hero
-router.post("/api/AddNewHero", function (req, res, next) {
+router.post("/api/add-new-hero", function (req, res, next) {
     if (req.header('Authorization') !== authorization) {
         res.status(401).send('Incorrect Authorization Token');
     } else {
@@ -104,7 +104,7 @@ router.post("/api/AddNewHero", function (req, res, next) {
 });
 
 //Update A Hero by its url
-router.post("/api/UpdateAHero", function (req, res, next) {
+router.post("/api/update-heroes", function (req, res, next) {
     if (req.header('Authorization') !== authorization) {
         res.status(401).send('Incorrect Authorization Token');
     } else {
@@ -117,7 +117,7 @@ router.post("/api/UpdateAHero", function (req, res, next) {
 });
 
 //Search for Heroes
-router.get("/api/SearchAHero", function (req, res, next) {
+router.get("/api/search-heroes", function (req, res, next) {
     if (req.header('Authorization') !== authorization) {
         res.status(401).send('Incorrect Authorization Token');
     } else {
@@ -136,7 +136,7 @@ router.get("/api/SearchAHero", function (req, res, next) {
 });
 
 //Get Hero By Url
-router.get("/api/GetHeroByUrl", function (req, res, next) {
+router.get("/api/get-hero-by-url", function (req, res, next) {
     if (req.header('Authorization') !== authorization) {
         res.status(401).send('Incorrect Authorization Token');
     } else {
@@ -151,7 +151,7 @@ router.get("/api/GetHeroByUrl", function (req, res, next) {
 });
 
 //Delete a hero by url
-router.delete("/api/DeleteByUrl", function (req, res, next) {
+router.delete("/api/delete-hero-by-url", function (req, res, next) {
     if (req.header('Authorization') !== authorization) {
         res.status(401).send('Incorrect Authorization Token');
     } else {
@@ -184,7 +184,7 @@ router.delete("/api/DeleteByUrl", function (req, res, next) {
 });
 
 //Upload Images
-app.post("/api/UploadImage", upload.fields([{ name: 'fileImage' }, { name: 'wallpaperImage' }]), function (req, res, next) {
+app.post("/api/upload-image", upload.fields([{ name: 'fileImage' }, { name: 'wallpaperImage' }]), function (req, res, next) {
     if (req.header('Authorization') !== authorization) {
         res.status(401).send('Incorrect Authorization Token');
     } else {
@@ -254,7 +254,7 @@ app.post("/api/UploadImage", upload.fields([{ name: 'fileImage' }, { name: 'wall
     }
 });
 
-router.post("/api/CheckPassword", function (req, res, next) {
+router.post("/api/check-password", function (req, res, next) {
     if (req.body.message === 'IAmBatman') {
         res.status(200).send('okay');
     } else {

@@ -25,7 +25,7 @@ export class Edit extends React.Component{
     }
 
     fetchCharacters() {
-        fetch('http://localhost:4000/api/GetAllHeroes?key=name&sort=asc', {
+        fetch('http://localhost:4000/api/get-all-heroes?key=name&sort=asc', {
             headers: {
                 'Authorization': configFile.apiAuthorizationToken
             }
@@ -104,7 +104,7 @@ export class Login extends React.Component {
             message: this.state.password
         };
         obj = JSON.stringify(obj);
-        fetch("http://localhost:4000/api/CheckPassword", {
+        fetch("http://localhost:4000/api/check-password", {
             method: "POST",
             body: obj,
             headers: {

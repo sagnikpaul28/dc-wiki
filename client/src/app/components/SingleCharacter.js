@@ -26,7 +26,7 @@ export class SingleCharacter extends React.Component {
     }
 
     fetchCharacterDetails() {
-        fetch("http://localhost:4000/api/GetHeroByUrl?name="+this.props.match.params.name, {
+        fetch("http://localhost:4000/api/get-hero-by-url?name="+this.props.match.params.name, {
             headers: {
                 'Authorization': configFile.apiAuthorizationToken
             }

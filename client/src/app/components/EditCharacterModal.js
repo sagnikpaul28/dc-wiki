@@ -101,7 +101,7 @@ export class EditCharacterModal extends React.Component {
                     message: 'Uploading'
                 });
 
-                fetch("http://localhost:4000/api/UploadImage", {
+                fetch("http://localhost:4000/api/upload-image", {
                     method: "POST",
                     body: data,
                     headers: {
@@ -128,7 +128,7 @@ export class EditCharacterModal extends React.Component {
             document.querySelector('.modal .modal-content').classList += ' show-paragraph';
 
             //Update the details
-            fetch('http://localhost:4000/api/UpdateAHero', {
+            fetch('http://localhost:4000/api/update-heroes', {
                 method: 'POST',
                 body: obj,
                 headers: {
@@ -147,7 +147,7 @@ export class EditCharacterModal extends React.Component {
     }
 
     onDelete() {
-        fetch(`http://localhost:4000/api/DeleteByUrl?url=${this.props.item.url}`, {
+        fetch(`http://localhost:4000/api/delete-hero-by-url?url=${this.props.item.url}`, {
             method: 'DELETE',
             body: JSON.stringify({
                 characterImage: this.state.characterImage,

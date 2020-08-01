@@ -92,7 +92,7 @@ export class AddCharacter extends React.Component {
             message: 'Uploading...'
         });
 
-        fetch(`http://localhost:4000/api/GetHeroByUrl?name=${this.state.url}`, {
+        fetch(`http://localhost:4000/api/get-hero-by-url?name=${this.state.url}`, {
             headers: {
                 'Authorization': configFile.apiAuthorizationToken
             },
@@ -100,7 +100,7 @@ export class AddCharacter extends React.Component {
             .then(res => res.json())
             .then(res => {
                if (res.length === 0 ) {
-                   fetch("http://localhost:4000/api/UploadImage", {
+                   fetch("http://localhost:4000/api/upload-image", {
                        method: "POST",
                        body: data,
                        headers: {
@@ -130,7 +130,7 @@ export class AddCharacter extends React.Component {
                         data = JSON.stringify(data);
                         console.log(data);
 
-                        fetch("http://localhost:4000/api/AddNewHero", {
+                        fetch("http://localhost:4000/api/add-new-hero", {
                             method: "POST",
                             body: data,
                             headers: {

@@ -13,7 +13,7 @@ export class Home extends React.Component {
     }
 
     fetchAllCharacters(query) {
-        let fetchUrl = "http://localhost:4000/api/SearchAHero";
+        let fetchUrl = "http://localhost:4000/api/search-heroes";
         if (query) {
             fetchUrl = fetchUrl + "?name=" + query;
         }
