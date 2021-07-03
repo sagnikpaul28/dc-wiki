@@ -8,8 +8,12 @@ const cloudinary = require('cloudinary');
 const path = require('path');
 
 //Setup Mongoose
-mongoose.connect("mongodb://sagnikpaul:SagnikPaul28@ds145562.mlab.com:45562/dc-wiki");
-mongoose.Promise = global.Promise;
+mongoose.connect('mongodb+srv://sagnikpaul28:sagnikpaul28@cluster.7as9x.mongodb.net/dc-wiki?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true});
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log("Connected to DB");
+});
 
 
 //Setup Cloudinary
